@@ -5,9 +5,10 @@ import CommentList from '../CommentList';
 class CommentBox extends Component {
 	render() {
 		return (
-			<div>My Comments</div>
+			<div>
 			<CommentForm />
 			<CommentList />
+			</div>
 		);
 	}
 }
