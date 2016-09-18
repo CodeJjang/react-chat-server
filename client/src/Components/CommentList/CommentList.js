@@ -5,8 +5,8 @@ class CommentList extends Component {
 	render() {
 		return (
 			<div>
-			<Comment author="Aviad"/>
-			<Comment author="Bar Inline"/>
+			<Comment author='Aviad'/>
+			<Comment author='Bar Inline'/>
 			</div>
 		);
 	}

@@ -1,14 +1,29 @@
 import React, { Component } from 'react';
 
 class CommentForm extends Component {
-	getInitialState() {
-		return { author: '', text: ''};
+	constructor(props) {
+		super(props);
+		this.state = { author: '', text: ''};
+		this.handleAuthorChange = this.handleAuthorChange.bind(this);
+		this.handleTextChange = this.handleTextChange.bind(this);
 	}
 	handleAuthorChange(e) {
 		this.setState({ author: e.target.value });
 	}
 	handleTextChange(e) {
 		this.setState({ text: e.target.value });
+	}
+	handleSubmit() {
+		handleSubmit: function(e) {
+	    e.preventDefault();
+	    var author = this.state.author.trim();
+	    var text = this.state.text.trim();
+	    if (!text || !author) {
+	      return;
+	    }
+	    // TODO: send request to the server
+	    this.setState({author: '', text: ''});
+  }
 	}
 	render() {
 		return (
@@ -17,13 +32,13 @@ class CommentForm extends Component {
 	        	<input
 	        		type="text"
 	        		value={ this.state.author }
-	        		onChange= {this.handleAuthorChange }
+	        		onChange={ this.handleAuthorChange }
 	        		placeholder="Your name"
 	        		/>
 	        	<input
 	        		type="text"
 	        		value={ this.state.text }
-	        		onChange= {this.handleTextChange }
+	        		onChange={ this.handleTextChange }
 	        		placeholder="Say something..."
 	        		/>
 	        	<input type="submit" value="Post" />
