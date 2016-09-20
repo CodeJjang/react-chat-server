@@ -6,42 +6,57 @@ import CommentList from '../CommentList';
 class CommentBox extends Component {
 	constructor(props) {
 		super( props );
-		this.state = { commentsApiUrl: 'http://localhost:1337/comment' };
+		this.state = {
+			commentsApiUrl: 'http://localhost:1337/comment',
+			comments: []
+		};
+		this.loadComments = this.loadComments.bind(this);
+		this.postComment = this.postComment.bind(this);
+	}
+	loadComments() {
+		$.ajax( {
+			url: this.state.commentsApiUrl,
+			dataType: 'json',
+			success: function(comments) {
+				this.setState( {
+					comments: comments
+				} );
+			}.bind( this ),
+			error: function(xhr, status, err) {
+				console.error( this.state.commentsApiUrl, status, err.toString() );
+			}.bind( this )
+		} );
+	}
+	postComment(comment) {
+		$.ajax( {
+			url: this.state.commentsApiUrl,
+			dataType: 'json',
+			type: 'POST',
+			data: comment,
+			success: function(comment) {
+				this.setState( {
+					comment: comment
+				} );
+			}.bind( this ),
+			error: function(xhr, status, err) {
+				console.error( this.state.commentsApiUrl, status, err.toString() );
+			}.bind( this )
+		} );
 	}
 	componentDidMount() {
-		$.ajax({
-	      url: this.state.commentsApiUrl,
-	      dataType: 'json',
-	      cache: false,
-	      success: function(data) {
-	        this.setState({data: data});
-	      }.bind(this),
-	      error: function(xhr, status, err) {
-	        console.error(this.state.commentsApiUrl, status, err.toString());
-	      }.bind(this)
-	    });
+		this.loadComments();
 	}
 	handleCommentSubmit(comment) {
-		$.ajax({
-	      url: this.state.commentsApiUrl,
-	      dataType: 'json',
-	      type: 'POST',
-	      data: comment,
-	      success: function(data) {
-	        this.setState({data: data});
-	      }.bind(this),
-	      error: function(xhr, status, err) {
-	        console.error(this.state.commentsApiUrl, status, err.toString());
-	      }.bind(this)
-	    });
+		this.postComment(comment);
+		this.loadComments();
 	}
 	render() {
 		return (
 			<div>
-			<CommentForm />
-			<CommentList onCommentSubmit={ this.handleCommentSumit }/>
+				<CommentForm />
+				<CommentList comments={this.state.comments} onCommentSubmit={ this.handleCommentSubmit }/>
 			</div>
-		);
+			);
 	}
 }
 

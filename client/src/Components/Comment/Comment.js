@@ -7,6 +7,7 @@ class Comment extends Component {
 				<h2>
 					{this.props.author}
 				</h2>
+				<span>{this.props.text}</span>
 			</div>
 		);
 	}
