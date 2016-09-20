@@ -6,7 +6,8 @@
  */
 
 module.exports = {
-
+  schema: true,
+  
   attributes: {
   	author: {
   		type: 'string',
