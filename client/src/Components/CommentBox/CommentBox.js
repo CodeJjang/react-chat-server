@@ -10,8 +10,8 @@ class CommentBox extends Component {
 			commentsApiUrl: 'http://localhost:1337/comment',
 			comments: []
 		};
-		this.loadComments = this.loadComments.bind(this);
-		this.postComment = this.postComment.bind(this);
+		this.loadComments = this.loadComments.bind( this );
+		this.postComment = this.postComment.bind( this );
 	}
 	loadComments() {
 		$.ajax( {
@@ -47,16 +47,16 @@ class CommentBox extends Component {
 		this.loadComments();
 	}
 	handleCommentSubmit(comment) {
-		this.postComment(comment);
+		this.postComment( comment );
 		this.loadComments();
 	}
 	render() {
 		return (
 			<div>
-				<CommentForm />
-				<CommentList comments={this.state.comments} onCommentSubmit={ this.handleCommentSubmit }/>
+				<CommentForm onCommentSubmit={ this.handleCommentSubmit } />
+				<CommentList comments={ this.state.comments } onCommentSubmit={ this.handleCommentSubmit } />
 			</div>
-			);
+		);
 	}
 }
 
