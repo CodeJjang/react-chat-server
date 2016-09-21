@@ -1,13 +1,18 @@
 import React, { Component } from 'react';
+import './Comment.css';
+import moment from'moment';
 
 class Comment extends Component {
 	render() {
 		return (
-			<div>
-				<h2>{ this.props.author }</h2>
-				<span>{ this.props.text }</span>
+			<div className='Comment'>
+				<div className='Comment-title'>
+					<span className='Author-name'>{ this.props.author }</span>
+					<span className='Comment-timestamp'>{ moment(this.props.timestamp).fromNow() }</span>
+				</div>
+				<p className='Comment-text'>{ this.props.text }</p>
 			</div>
-		);
+			);
 	}
 }
 

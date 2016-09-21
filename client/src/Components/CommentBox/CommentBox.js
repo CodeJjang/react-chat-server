@@ -12,6 +12,7 @@ class CommentBox extends Component {
 		};
 		this.loadComments = this.loadComments.bind( this );
 		this.postComment = this.postComment.bind( this );
+		this.handleCommentSubmit = this.handleCommentSubmit.bind( this );
 	}
 	loadComments() {
 		$.ajax( {
@@ -37,6 +38,7 @@ class CommentBox extends Component {
 				this.setState( {
 					comment: comment
 				} );
+				this.loadComments();
 			}.bind( this ),
 			error: function(xhr, status, err) {
 				console.error( this.state.commentsApiUrl, status, err.toString() );
@@ -48,15 +50,14 @@ class CommentBox extends Component {
 	}
 	handleCommentSubmit(comment) {
 		this.postComment( comment );
-		this.loadComments();
 	}
 	render() {
 		return (
-			<div>
-				<CommentForm onCommentSubmit={ this.handleCommentSubmit } />
+			<div className='Comment-box'>
 				<CommentList comments={ this.state.comments } onCommentSubmit={ this.handleCommentSubmit } />
+				<CommentForm onCommentSubmit={ this.handleCommentSubmit } />
 			</div>
-		);
+			);
 	}
 }
 

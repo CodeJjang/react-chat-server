@@ -1,0 +1,32 @@
+.Comment {
+	width: 30%;
+	margin-left: auto;
+   	margin-right: auto;
+    border-bottom: 2px solid #73AD21;
+    margin-top: 5px;
+}
+
+.Comment:first-child {
+	border-top: 2px solid #73AD21;
+}
+
+.Comment-title {
+	padding: 5px 5px 5px 2px;
+	display: block;
+}
+
+.Author-name {
+	float: left;
+	font-weight: bold;
+	clear: left;
+}
+
+.Comment-timestamp {
+	float: right;
+	
+}
+
+.Comment-text {
+	text-align: left;
+	padding: 2px;
+}

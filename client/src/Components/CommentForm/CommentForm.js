@@ -40,16 +40,18 @@ class CommentForm extends Component {
 	render() {
 		return (
 			<div>
-				<form className='commentForm' onSubmit={ this.handleSubmit }>
+				<form className='form-control' onSubmit={ this.handleSubmit }>
 					<input type='text'
 						value={ this.state.author }
 						onChange={ this.handleAuthorChange }
-						placeholder='Your nickname' />
+						placeholder='Your nickname'
+						className='form-control' />
 					<input type='text'
 						value={ this.state.text }
 						onChange={ this.handleTextChange }
-						placeholder='Say something...' />
-					<input type='submit' value='Post' />
+						placeholder='Say something...' 
+						className='form-control' />
+					<input type='submit' value='Post' className='btn btn-success'/>
 				</form>
 			</div>
 			);

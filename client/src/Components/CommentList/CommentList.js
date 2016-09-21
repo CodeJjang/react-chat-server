@@ -5,14 +5,17 @@ class CommentList extends Component {
 	render() {
 		var commentElements = this.props.comments.map( (comment) => {
 			return (
-				<Comment key={ comment.id } author={ comment.author } text={ comment.text } />
+				<Comment key={ comment.id }
+					author={ comment.author }
+					text={ comment.text }
+					timestamp={ comment.createdAt } />
 				);
 		} );
 		return (
 			<div>
 				{ commentElements }
 			</div>
-		);
+			);
 	}
 }
 
