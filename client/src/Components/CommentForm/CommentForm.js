@@ -64,16 +64,10 @@ class CommentForm extends Component {
 					value={ this.state.author }
 					onChange={ this.handleAuthorChange }
 					placeholder='Your nickname' />
-				<FormControl
-				componentClass='textarea'
-				value={ this.state.text }
-				placeholder='Say something...' />
-				    <Button bsStyle="success"
-				    type='submit'
-				    value='Post'>
-				    	Send
-				    </Button>
-
+				<FormControl componentClass='textarea' value={ this.state.text } placeholder='Say something...' />
+				<Button bsStyle='success' type='submit' value='Post'>
+					Send
+				</Button>
 			</form>
 
 			);
