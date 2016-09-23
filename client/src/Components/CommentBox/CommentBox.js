@@ -53,7 +53,7 @@ class CommentBox extends Component {
 	}
 	render() {
 		return (
-			<div className='Comment-box'>
+			<div className='CommentBox'>
 				<CommentList comments={ this.state.comments } onCommentSubmit={ this.handleCommentSubmit } />
 				<CommentForm onCommentSubmit={ this.handleCommentSubmit } />
 			</div>

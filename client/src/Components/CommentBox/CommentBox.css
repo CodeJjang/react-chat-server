@@ -1,7 +1,15 @@
-.Comment-box {
-	width: 50%;
+.CommentBox {
+	/*width: 50%;
 	margin-left: auto;
    	margin-right: auto;
     border-bottom: 2px solid #73AD21;
-    margin-top: 5px;
+    margin-top: 5px;*/
+}
+
+.CommentBox-form {
+
+}
+
+.CommentBox-list {
+	
 }
