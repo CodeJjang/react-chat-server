@@ -1,0 +1,21 @@
+.CommentForm {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    margin-bottom: 4px;
+}
+
+.CommentForm-nickname {
+	width:20% !important;
+	margin-left: 5px !important;
+}
+
+.CommentForm-text {
+	width:73% !important;
+	margin-left: -1px !important;
+}
+
+.CommentForm-button {
+	margin-left: 1px;
+	width: 6%;
+}

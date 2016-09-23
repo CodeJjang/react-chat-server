@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-import { FormControl, Button } from 'react-bootstrap';
+import { Form, FormControl, Button } from 'react-bootstrap';
+import './CommentForm.css';
 
 class CommentForm extends Component {
 	constructor(props) {
@@ -39,37 +40,28 @@ class CommentForm extends Component {
 		} );
 	}
 	render() {
-		// return (
-		// 	<div>
-		// 		<form className='form-control' onSubmit={ this.handleSubmit }>
-		// 			<input type='text'
-		// 				value={ this.state.author }
-		// 				onChange={ this.handleAuthorChange }
-		// 				placeholder='Your nickname'
-		// 				className='form-control' />
-		// 			<input type='text'
-		// 				value={ this.state.text }
-		// 				onChange={ this.handleTextChange }
-		// 				placeholder='Say something...' 
-		// 				className='form-control' />
-		// 			<input type='submit' value='Post' className='btn btn-success'/>
-		// 		</form>
-		// 	</div>
-		// 	);
 		return (
-
-			<form>
-				<FormControl id='formControlsText'
+			
+			<Form inline className='CommentForm'>
+				<FormControl className='CommentForm-nickname'
 					type='text'
 					value={ this.state.author }
 					onChange={ this.handleAuthorChange }
 					placeholder='Your nickname' />
-				<FormControl componentClass='textarea' value={ this.state.text } placeholder='Say something...' />
-				<Button bsStyle='success' type='submit' value='Post'>
+					{ ' '}
+				<FormControl className='CommentForm-text'
+					type='text'
+					value={ this.state.text }
+					onChange={ this.handleTextChange }
+					placeholder='Say something...' />
+				<Button className='CommentForm-button'
+				bsStyle='success' 
+				type='submit' 
+				onClick={ this.handleSubmit }
+				value='Post'>
 					Send
 				</Button>
-			</form>
-
+			</Form>
 			);
 	}
 }
