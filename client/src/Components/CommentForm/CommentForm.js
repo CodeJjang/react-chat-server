@@ -35,7 +35,6 @@ class CommentForm extends Component {
 			text: text
 		} );
 		this.setState( {
-			author: '',
 			text: ''
 		} );
 	}

@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import $ from 'jquery';
 import CommentForm from '../CommentForm';
 import CommentList from '../CommentList';
+import './CommentBox.css';
 
 class CommentBox extends Component {
 	constructor(props) {
@@ -22,6 +23,7 @@ class CommentBox extends Component {
 				this.setState( {
 					comments: comments
 				} );
+				this._commentBox.scrollDown();
 			}.bind( this ),
 			error: function(xhr, status, err) {
 				console.error( this.state.commentsApiUrl, status, err.toString() );
@@ -54,7 +56,7 @@ class CommentBox extends Component {
 	render() {
 		return (
 			<div className='CommentBox'>
-				<CommentList comments={ this.state.comments } onCommentSubmit={ this.handleCommentSubmit } />
+				<CommentList ref={ (c) => this._commentBox = c } comments={ this.state.comments } onCommentSubmit={ this.handleCommentSubmit } />
 				<CommentForm onCommentSubmit={ this.handleCommentSubmit } />
 			</div>
 			);

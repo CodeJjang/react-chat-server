@@ -1,0 +1,7 @@
+.CommentList {
+	position: absolute;
+	top: 0;
+	bottom: 40px;
+	overflow-y: scroll;
+	z-index: -1;
+}
