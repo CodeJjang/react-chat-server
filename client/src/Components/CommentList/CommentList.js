@@ -1,11 +1,18 @@
 import React, { Component } from 'react';
 import Comment from '../Comment';
-import $ from 'jquery';
 import './CommentList.css';
 
 class CommentList extends Component {
+	constructor(props) {
+		super(props);
+		this.scrollDown = this.scrollDown.bind(this);
+	}
 	scrollDown() {
-		$("#CommentList").scrollTop = $("#CommentList").scrollHeight;
+		this._commentsListDiv.scrollTop = this._commentsListDiv.scrollHeight;
+	}
+	componentDidMount() {
+		this.scrollDown();
+
 	}
 	render() {
 		var commentElements = this.props.comments.map( (comment) => {
@@ -17,7 +24,7 @@ class CommentList extends Component {
 				);
 		} );
 		return (
-			<div id="CommentList" className="CommentList">
+			<div ref={ (c) => this._commentsListDiv = c } className='CommentList'>
 				{ commentElements }
 			</div>
 			);
