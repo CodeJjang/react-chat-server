@@ -11,7 +11,9 @@
     "moment": "^2.15.1",
     "react": "^15.3.2",
     "react-bootstrap": "^0.30.3",
-    "react-dom": "^15.3.2"
+    "react-dom": "^15.3.2",
+    "sails.io.js": "^0.13.8",
+    "socket.io-client": "^1.4.8"
   },
   "scripts": {
     "start": "react-scripts start",
