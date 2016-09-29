@@ -1,6 +1,6 @@
 .CommentList {
 	position: absolute;
-	top: 0;
+	top: 60px;
 	bottom: 40px;
 	overflow-y: scroll;
 	z-index: -1;
