@@ -12,7 +12,6 @@ class CommentList extends Component {
 	}
 	componentDidMount() {
 		this.scrollDown();
-
 	}
 	render() {
 		var commentElements = this.props.comments.map( (comment) => {

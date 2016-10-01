@@ -7,6 +7,9 @@
 
 module.exports = {
     create: function(req, res, next) {
+        // if(!req.isSocket()){
+        //     return res.badRequest();
+        // }
         if (!validateParams(req.body)) {
             next(new Error('Some parameters are missing.'));
         }
@@ -17,13 +20,14 @@ module.exports = {
         UserService.findOrCreateUser(author, text)
             .then((user) => {
                 newUser = user;
-                return CommentService.createComment(user, author)
+                return CommentService.createComment(user, text)
             })
             .then((comment) => {
                 comment.author = newUser;
                 res.json(comment);
                 return Promise.resolve();
             })
+            .then(RoomService.sendSyncToGlobalRoom)
             .catch((err) => {
                 next(err);
             });

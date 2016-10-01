@@ -14,6 +14,11 @@ class CommentBox extends Component {
 		this.loadComments = this.loadComments.bind( this );
 		this.postComment = this.postComment.bind( this );
 		this.handleCommentSubmit = this.handleCommentSubmit.bind( this );
+		this.joinGlobalRoom = this.joinGlobalRoom.bind(this);
+	}
+	joinGlobalRoom() {
+		this.props.socket.joinGlobalRoom();
+		this.props.socket.syncCallback = this.loadComments;
 	}
 	loadComments() {
 		$.ajax( {
@@ -49,6 +54,7 @@ class CommentBox extends Component {
 	}
 	componentDidMount() {
 		this.loadComments();
+		this.joinGlobalRoom();
 	}
 	handleCommentSubmit(comment) {
 		this.postComment( comment );
