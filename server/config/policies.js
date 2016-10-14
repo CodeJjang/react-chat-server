@@ -27,10 +27,10 @@ module.exports.policies = {
   ***************************************************************************/
 
   // '*': true,
-  // '*': 'sessionAuth',
-  // RoomController: {
-  //   joinGlobalRoom: true
-  // }
+  '*': 'sessionAuth',
+  RoomController: {
+    joinGlobalRoom: true
+  }
   /***************************************************************************
   *                                                                          *
   * Here's an example of mapping some policies to run before a controller    *
