@@ -23,18 +23,22 @@ class Socket {
         this.joinGlobalRoom = this.joinGlobalRoom.bind(this);
     }
     joinGlobalRoom() {
-        console.log('Attempting to join global room...');
         var self = this;
-        this.io.socket.get('/room/joinGlobalRoom', function(body, JWR) {
-            if (JWR.statusCode !== 200) {
-                console.log('Failed joining global room.');
-                console.log('Sails responded with: ', body);
-                console.log('with headers: ', JWR.headers);
-                console.log('and with status code: ', JWR.statusCode);
-            } else {
-                console.log('Joined global room.');
-                self._listenToSync();
-            }
+        return new Promise(function(resolve, reject) {
+            console.log('Attempting to join global room...');
+            self.io.socket.get('/room/joinGlobalRoom', function(body, JWR) {
+                if (JWR.statusCode !== 200) {
+                    console.log('Failed joining global room.');
+                    console.log('Sails responded with: ', body);
+                    console.log('with headers: ', JWR.headers);
+                    console.log('and with status code: ', JWR.statusCode);
+                    reject();
+                } else {
+                    console.log('Joined global room.');
+                    self._listenToSync();
+                    resolve();
+                }
+            });
         });
     }
     _listenToSync() {
@@ -48,6 +52,18 @@ class Socket {
         if (cb) {
             this._syncCallback = cb;
         }
+    }
+    post(url, data, success, error) {
+        this.io.socket.post(url, data, function(body, JWR) {
+            console.log('Sails responded with: ', body);
+            console.log('with headers: ', JWR.headers);
+            console.log('and with status code: ', JWR.statusCode);
+            if (JWR.statusCode !== 200) {
+                error();
+            } else {
+                success(body);
+            }
+        });
     }
     test() {
         this.io.socket.get('/comment', function(body, JWR) {

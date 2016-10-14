@@ -17,13 +17,16 @@ class CommentBox extends Component {
 		this.joinGlobalRoom = this.joinGlobalRoom.bind(this);
 	}
 	joinGlobalRoom() {
-		this.props.socket.joinGlobalRoom();
 		this.props.socket.syncCallback = this.loadComments;
+		return this.props.socket.joinGlobalRoom();
 	}
 	loadComments() {
-		$.ajax( {
+		return $.ajax( {
 			url: this.state.commentsApiUrl,
 			dataType: 'json',
+			xhrFields: {
+		    	withCredentials: true
+		   	},
 			success: function(comments) {
 				this.setState( {
 					comments: comments
@@ -36,25 +39,26 @@ class CommentBox extends Component {
 		} );
 	}
 	postComment(comment) {
-		$.ajax( {
-			url: this.state.commentsApiUrl,
-			dataType: 'json',
-			type: 'POST',
-			data: comment,
-			success: function(comment) {
+		this.props.socket.post(
+			this.state.commentsApiUrl,
+			comment,
+			function success(comment) {
 				this.setState( {
 					comment: comment
 				} );
 				this.loadComments();
-			}.bind( this ),
-			error: function(xhr, status, err) {
-				console.error( this.state.commentsApiUrl, status, err.toString() );
-			}.bind( this )
-		} );
+			}.bind(this),
+			function error() {
+				console.error( 'Failed posting comment.' );
+			}.bind(this)
+		);
 	}
 	componentDidMount() {
-		this.loadComments();
-		this.joinGlobalRoom();
+		this.joinGlobalRoom()
+			.then(this.loadComments)
+			.catch((err)=> {
+				console.log(err);
+			});
 	}
 	handleCommentSubmit(comment) {
 		this.postComment( comment );

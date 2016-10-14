@@ -7,31 +7,42 @@
 
 module.exports = {
     create: function(req, res, next) {
-        // if(!req.isSocket()){
-        //     return res.badRequest();
-        // }
         if (!validateParams(req.body)) {
             next(new Error('Some parameters are missing.'));
         }
 
         var author = req.body.author;
         var text = req.body.text;
-        var newUser;
-        UserService.findOrCreateUser(author, text)
+        var room = req.body.room;
+        
+        UserService.updateUser(req.session.userId, author)
             .then((user) => {
-                newUser = user;
-                return CommentService.createComment(user, text)
+                if(user.length == 0) {
+                    return Promise.reject(new Error('No user was found.'));
+                }
+                return RoomService.sendComment(user[0], text, room);
             })
             .then((comment) => {
-                comment.author = newUser;
                 res.json(comment);
                 return Promise.resolve();
             })
-            .then(RoomService.sendSyncToGlobalRoom)
             .catch((err) => {
+                console.log(err);
                 next(err);
             });
 
+    },
+
+    find: function(req, res, next) {
+        CommentService.findComment()
+            .then((comments) => {
+                res.json(comments);
+                return Promise.resolve();
+            })
+            .catch((err) => {
+                console.log(err);
+                next(err);
+            });
     }
 };
 

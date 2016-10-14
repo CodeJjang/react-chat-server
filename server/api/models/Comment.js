@@ -10,7 +10,7 @@ module.exports = {
   
   attributes: {
   	author: {
-  		model: 'user',
+  		type: 'string',
   		required: true
   	},
   	text: {

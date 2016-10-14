@@ -30,7 +30,7 @@ module.exports.session = {
   * the example below is for 24 hours                                        *
   *                                                                          *
   ***************************************************************************/
-
+  
   // cookie: {
   //   maxAge: 24 * 60 * 60 * 1000
   // },
@@ -74,8 +74,8 @@ module.exports.session = {
   *                                                                          *
   ***************************************************************************/
 
-  // adapter: 'mongo',
-  // url: 'mongodb://user:password@localhost:27017/dbname', // user, password and port optional
+  adapter: 'mongo',
+  // url: 'mongodb://ds033116.mlab.com:33116/react_dev', // defined in local.js
 
   /***************************************************************************
   *                                                                          *

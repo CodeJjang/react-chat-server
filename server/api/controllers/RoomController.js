@@ -7,7 +7,6 @@
 
 module.exports = {
     joinGlobalRoom: function(req, res, next) {
-        console.log('Incoming request to join global room...');
         if (!req.isSocket) {
             return res.badRequest();
         }
