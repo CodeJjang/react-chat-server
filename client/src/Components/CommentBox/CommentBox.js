@@ -39,19 +39,24 @@ class CommentBox extends Component {
 		} );
 	}
 	postComment(comment) {
-		this.props.socket.post(
-			this.state.commentsApiUrl,
-			comment,
-			function success(comment) {
+		$.ajax( {
+			url: this.state.commentsApiUrl,
+			dataType: 'json',
+			xhrFields: {
+		    	withCredentials: true
+		   	},
+			type: 'POST',
+			data: comment,
+			success: function(comment) {
 				this.setState( {
 					comment: comment
 				} );
 				this.loadComments();
-			}.bind(this),
-			function error() {
-				console.error( 'Failed posting comment.' );
-			}.bind(this)
-		);
+			}.bind( this ),
+			error: function(xhr, status, err) {
+				console.error( this.state.commentsApiUrl, status, err.toString() );
+			}.bind( this )
+		} );
 	}
 	componentDidMount() {
 		this.joinGlobalRoom()

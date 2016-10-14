@@ -53,29 +53,5 @@ class Socket {
             this._syncCallback = cb;
         }
     }
-    post(url, data, success, error) {
-        this.io.socket.post(url, data, function(body, JWR) {
-            console.log('Sails responded with: ', body);
-            console.log('with headers: ', JWR.headers);
-            console.log('and with status code: ', JWR.statusCode);
-            if (JWR.statusCode !== 200) {
-                error();
-            } else {
-                success(body);
-            }
-        });
-    }
-    test() {
-        this.io.socket.get('/comment', function(body, JWR) {
-            // JWR ==> "JSON WebSocket Response"
-            console.log('Sails responded with: ', body);
-            console.log('with headers: ', JWR.headers);
-            console.log('and with status code: ', JWR.statusCode);
-
-            // io.socket.disconnect();
-            // first argument `body` === `JWR.body`
-            // (just for convenience, and to maintain familiar usage, a la `JQuery.get()`)
-        });
-    }
 }
 export default Socket;
