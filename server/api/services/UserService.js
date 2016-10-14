@@ -17,3 +17,7 @@ module.exports.createUser = function() {
 module.exports.findUser = function(params) {
 	return User.find(params);
 };
+
+module.exports.deleteUser = function(params) {
+	return User.destroy(params);
+};

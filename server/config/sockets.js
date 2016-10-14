@@ -122,10 +122,22 @@ module.exports.sockets = {
   * disconnects                                                              *
   *                                                                          *
   ***************************************************************************/
-  // afterDisconnect: function(session, socket, cb) {
-  //   // By default: do nothing.
-  //   return cb();
-  // },
+  afterDisconnect: function(session, socket, cb) {
+    console.log('A socket disconnected...');
+    UserService.deleteUser(session.userId)
+      .then(() => {
+        console.log('User with id %s was deleted.', session.userId);
+        session.userId = undefined;
+        return Promise.resolve();
+      })
+      .catch((err) => {
+        if(err){
+          console.log('Failed deleting user...');
+          console.log(err);
+        }
+      })
+      .finally(cb);
+  },
 
   /***************************************************************************
   *                                                                          *
