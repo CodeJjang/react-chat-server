@@ -1,21 +1,9 @@
 var _globalRoomName = 'globalRoom',
     _syncEventName = 'sync';
 
-module.exports.joinGlobalRoom = function(req, cb) {
-    var socketId = sails.sockets.getId(req);
-    UserService.createUser(socketId)
-        .then((user) => {
-            console.log('User was created with id:', user.id);
-            req.session.userId = user.id;
-            req.session.save();
-            console.log('Session id:', req.sessionID);
-            return Promise.resolve();
-        })
-        .then(() => {
-            sails.sockets.join(req, _globalRoomName, cb);
-            return Promise.resolve();
-        })
-        .catch((err) => cb(err));
+module.exports.joinGlobalRoom = function(req) {
+    return (req.session.userId ? Promise.resolve() : createUser(req))
+        .then(joinGlobalRoomAsPromise(req));
 }
 
 module.exports.sendComment = function(user, text, room) {
@@ -35,7 +23,28 @@ module.exports.getGlobalRoomName = function() {
 }
 
 function sendSyncToRoom(roomName) {
-	console.log('Sending sync to room:', roomName);
+    console.log('Sending sync to room:', roomName);
     sails.sockets.broadcast(roomName, _syncEventName);
     return Promise.resolve();
+}
+
+function createUser(req) {
+    return UserService.createUser()
+        .then((user) => {
+            console.log('User was created with id:', user.id);
+            req.session.userId = user.id;
+            req.session.save();
+            return Promise.resolve();
+        });
+}
+
+function joinGlobalRoomAsPromise(req) {
+    return new Promise(function(resolve, reject) {
+        sails.sockets.join(req, _globalRoomName, function(err) {
+            if (err) {
+                return reject(err);
+            }
+            resolve();
+        });
+    });
 }

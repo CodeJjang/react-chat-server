@@ -11,13 +11,16 @@ module.exports = {
             return res.badRequest();
         }
 
-        RoomService.joinGlobalRoom(req, function(err) {
-            if (err) {
-                return res.serverError(err);
-            }
-
-            console.log('Someone joined global room.');
-            return res.ok();
-        });
+        RoomService.joinGlobalRoom(req)
+            .then(() => {
+                console.log('Someone joined global room.');
+                return res.ok();
+            })
+            .catch((err) => {
+                if (err) {
+                    console.log(err);
+                    next(err);
+                }
+            });
     }
 };
