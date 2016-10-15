@@ -10,7 +10,12 @@ module.exports = {
 
   attributes: {
     nickname: {
-      type: 'string'
+      type: 'string',
+      required: true
+    },
+    currentRoomId: {
+    	type: 'string',
+    	required: true
     }
   }
 };

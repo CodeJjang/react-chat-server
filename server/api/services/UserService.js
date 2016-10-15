@@ -8,10 +8,12 @@ module.exports.updateUser = function(id, nickname) {
     });
 };
 
-module.exports.createUser = function() {
-	console.log('Creating anonymous user');
+module.exports.createUser = function(currentRoomId) {
+	console.log('Creating anonymous user.');
 
-	return User.create({});
+	return User.create({
+		currentRoomId: currentRoomId
+	});
 };
 
 module.exports.findUser = function(params) {

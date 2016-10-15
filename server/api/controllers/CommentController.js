@@ -7,7 +7,7 @@
 
 module.exports = {
     create: function(req, res, next) {
-        if (!validateParams(req.body)) {
+        if (!validateCreateParams(req.body)) {
             next(new Error('Some parameters are missing.'));
         }
 
@@ -46,7 +46,7 @@ module.exports = {
     }
 };
 
-function validateParams(body) {
+function validateCreateParams(body) {
     if (_.isUndefined(body.author) || _.isUndefined(body.text)) {
         return false;
     }

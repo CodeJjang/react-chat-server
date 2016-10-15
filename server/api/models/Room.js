@@ -6,9 +6,14 @@
  */
 
 module.exports = {
-
-  attributes: {
-
-  }
+    attributes: {
+        name: {
+            type: 'string',
+            required: true
+        },
+        ownerId: {
+        	type: 'string',
+        	required: true
+        }
+    }
 };
-

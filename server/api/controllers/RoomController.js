@@ -22,5 +22,32 @@ module.exports = {
                     next(err);
                 }
             });
+    },
+
+    create: function(req, res, next) {
+        if (!validateCreateParams(req.body)) {
+            next(new Error('Some parameters are missing.'));
+        }
+
+        var name = req.body.name;
+        RoomService.createRoom(name, req.session.userId)
+            .then((room) => {
+                console.log('Room %s was created.', name);
+                return res.json(room);
+            })
+            .catch((err) => {
+                if (err) {
+                    console.log(err);
+                    next(err);
+                }
+            });
     }
 };
+
+function validateCreateParams(body) {
+    if (_.isUndefined(body.name)) {
+        return false;
+    }
+
+    return true;
+}

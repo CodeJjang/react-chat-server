@@ -1,9 +1,25 @@
 var _globalRoomName = 'globalRoom',
     _syncEventName = 'sync';
 
+module.exports.createRoom = function(roomName, ownerId) {
+    return Room.create({
+        roomName: roomName,
+        ownerId: ownerId
+    });
+}
+
+module.exports.createGlobalRoomIfNotExists = function() {
+    return Room.findOrCreate({
+        name: _globalRoomName
+    }, {
+        name: _globalRoomName,
+        ownerId: 'none'
+    });
+}
+
 module.exports.joinGlobalRoom = function(req) {
-    return (req.session.userId ? Promise.resolve() : createUser(req))
-        .then(joinGlobalRoomAsPromise(req));
+    return (req.session.userId ? Promise.resolve() : createUser(req, _globalRoomName))
+        .then(joinRoom(req, _globalRoomName));
 }
 
 module.exports.sendComment = function(user, text, room) {
@@ -28,8 +44,13 @@ function sendSyncToRoom(roomName) {
     return Promise.resolve();
 }
 
-function createUser(req) {
-    return UserService.createUser()
+function createUser(req, currentRoomName) {
+    return RoomService.findRoom({
+            name: currentRoomName
+        })
+        .then((room) => {
+            return UserService.createUser(room.id);
+        })
         .then((user) => {
             console.log('User was created with id:', user.id);
             req.session.userId = user.id;
@@ -38,9 +59,9 @@ function createUser(req) {
         });
 }
 
-function joinGlobalRoomAsPromise(req) {
+function joinRoom(req, roomName) {
     return new Promise(function(resolve, reject) {
-        sails.sockets.join(req, _globalRoomName, function(err) {
+        sails.sockets.join(req, roomName, function(err) {
             if (err) {
                 return reject(err);
             }
