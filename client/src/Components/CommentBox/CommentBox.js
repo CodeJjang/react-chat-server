@@ -14,11 +14,11 @@ class CommentBox extends Component {
 		this.loadComments = this.loadComments.bind( this );
 		this.postComment = this.postComment.bind( this );
 		this.handleCommentSubmit = this.handleCommentSubmit.bind( this );
-		this.joinGlobalRoom = this.joinGlobalRoom.bind(this);
+		this.registerToCommentsSyncMessages = this.registerToCommentsSyncMessages.bind(this);
 	}
-	joinGlobalRoom() {
-		this.props.socket.syncCallback = this.loadComments;
-		return this.props.socket.joinGlobalRoom();
+	registerToCommentsSyncMessages() {
+		this.props.socket.commentsSyncCallback = this.loadComments;
+		return Promise.resolve();
 	}
 	loadComments() {
 		return $.ajax( {
@@ -31,7 +31,7 @@ class CommentBox extends Component {
 				this.setState( {
 					comments: comments
 				} );
-				this._commentBox.scrollDown();
+				this._commentList.scrollDown();
 			}.bind( this ),
 			error: function(xhr, status, err) {
 				console.error( this.state.commentsApiUrl, status, err.toString() );
@@ -51,19 +51,20 @@ class CommentBox extends Component {
 				this.setState( {
 					comment: comment
 				} );
-				this.loadComments();
 			}.bind( this ),
 			error: function(xhr, status, err) {
 				console.error( this.state.commentsApiUrl, status, err.toString() );
 			}.bind( this )
 		} );
 	}
-	componentDidMount() {
-		this.joinGlobalRoom()
-			.then(this.loadComments)
-			.catch((err)=> {
-				console.log(err);
-			});
+	componentDidUpdate(prevProps) {
+		if(!prevProps.authenticated && this.props.authenticated) {
+			this.registerToCommentsSyncMessages()
+				.then(this.loadComments)
+				.catch((err)=> {
+					console.log(err);
+				});
+		}
 	}
 	handleCommentSubmit(comment) {
 		this.postComment( comment );
@@ -71,7 +72,7 @@ class CommentBox extends Component {
 	render() {
 		return (
 			<div className='CommentBox'>
-				<CommentList ref={ (c) => this._commentBox = c } comments={ this.state.comments } onCommentSubmit={ this.handleCommentSubmit } />
+				<CommentList ref={ (c) => this._commentList = c } comments={ this.state.comments }/>
 				<CommentForm onCommentSubmit={ this.handleCommentSubmit } />
 			</div>
 			);

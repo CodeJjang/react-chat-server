@@ -1,0 +1,11 @@
+{
+  "name": "user-box",
+  "version": "1.0.0",
+  "description": "",
+  "main": "UserBox.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC"
+}

@@ -1,12 +1,18 @@
 import SailsIOClient from 'sails.io.js';
 import SocketIOClient from 'socket.io-client';
 
+var _newCommentSyncEventName = 'sync_comments',
+    _newUserSyncEventName = 'sync_users';
+
 class Socket {
     constructor(props) {
         this.io = SailsIOClient(SocketIOClient);
         this.io.sails.url = props.url;
-        this._syncCallback = null;
+        this._commentsSyncCallback = null;
+        this._usersSyncCallback = null;
         this._listenToSync = this._listenToSync.bind(this);
+        this._listenToCommentsSync = this._listenToCommentsSync.bind(this);
+        this._listenToUsersSync = this._listenToUsersSync.bind(this);
         this.joinGlobalRoom = this.joinGlobalRoom.bind(this);
     }
     joinGlobalRoom() {
@@ -29,15 +35,35 @@ class Socket {
         });
     }
     _listenToSync() {
+        this._listenToCommentsSync();
+        this._listenToUsersSync();
+    }
+
+    _listenToCommentsSync() {
         var self = this;
-        this.io.socket.on('sync', function(data) {
-            console.log('Received sync message.');
-            self._syncCallback();
+        this.io.socket.on(_newCommentSyncEventName, function(data) {
+            console.log('Received comments sync message.');
+            self._commentsSyncCallback();
         });
     }
-    set syncCallback(cb) {
+
+    _listenToUsersSync() {
+        var self = this;
+        this.io.socket.on(_newUserSyncEventName, function(data) {
+            console.log('Received users sync message.');
+            self._usersSyncCallback();
+        });
+    }
+
+    set commentsSyncCallback(cb) {
         if (cb) {
-            this._syncCallback = cb;
+            this._commentsSyncCallback = cb;
+        }
+    }
+
+    set usersSyncCallback(cb) {
+        if (cb) {
+            this._usersSyncCallback = cb;
         }
     }
 }

@@ -1,11 +1,18 @@
+var util = require('util');
+
 var _globalRoomName = 'globalRoom',
-    _syncEventName = 'sync';
+    _newCommentSyncEventName = 'sync_comments',
+    _newUserSyncEventName = 'sync_users';
 
 module.exports.createRoom = function(roomName, ownerId) {
     return Room.create({
         roomName: roomName,
         ownerId: ownerId
     });
+}
+
+module.exports.findRoom = function(params) {
+    return Room.find(params);
 }
 
 module.exports.createGlobalRoomIfNotExists = function() {
@@ -18,7 +25,7 @@ module.exports.createGlobalRoomIfNotExists = function() {
 }
 
 module.exports.joinGlobalRoom = function(req) {
-    return (req.session.userId ? Promise.resolve() : createUser(req, _globalRoomName))
+    return (req.session.user ? Promise.resolve() : createUser(req, _globalRoomName))
         .then(joinRoom(req, _globalRoomName));
 }
 
@@ -27,10 +34,10 @@ module.exports.sendComment = function(user, text, room) {
 
     if (!room) {
         return createCommentPromise
-            .then(sendSyncToRoom(_globalRoomName));
+            .then(sendSyncToRoom(_globalRoomName, _newCommentSyncEventName));
     } else {
         return createCommentPromise
-            .then(sendSyncToRoom(room));
+            .then(sendSyncToRoom(room, _newCommentSyncEventName));
     }
 }
 
@@ -38,22 +45,31 @@ module.exports.getGlobalRoomName = function() {
     return _globalRoomName;
 }
 
-function sendSyncToRoom(roomName) {
-    console.log('Sending sync to room:', roomName);
-    sails.sockets.broadcast(roomName, _syncEventName);
+module.exports.sendUserSyncToRoom = function(roomName) {
+    return sendSyncToRoom(roomName, _newUserSyncEventName);
+}
+
+function sendSyncToRoom(roomName, eventName) {
+    console.log('Sending sync to room: %s, with event name: %s.', roomName, eventName);
+    sails.sockets.broadcast(roomName, eventName);
     return Promise.resolve();
 }
 
 function createUser(req, currentRoomName) {
-    return RoomService.findRoom({
+    return Room.find({
             name: currentRoomName
         })
-        .then((room) => {
-            return UserService.createUser(room.id);
+        .then((rooms) => {
+            if (rooms && rooms.length === 1) {
+                return UserService.createUser(rooms[0].id);
+            }
+
+            // can be thrown either for several rooms or no room at all, which is a bug
+            return Promise.reject(new Error(util.format('No sinle room was found with name %s', currentRoomName)));
         })
         .then((user) => {
             console.log('User was created with id:', user.id);
-            req.session.userId = user.id;
+            req.session.user = user;
             req.session.save();
             return Promise.resolve();
         });

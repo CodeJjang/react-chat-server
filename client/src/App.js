@@ -3,7 +3,7 @@ import './App.css';
 
 import Socket from './Services/Socket';
 import NavigationBar from './Components/NavigationBar';
-import CommentBox from './Components/CommentBox';
+import Chat from './Components/Chat';
 
 class App extends Component {
   constructor(props) {
@@ -16,7 +16,7 @@ class App extends Component {
     return (
       <div>
         <NavigationBar />
-        <CommentBox socket={this.state.socket}/>
+        <Chat socket={this.state.socket}/>
       </div>
       );
   }

@@ -30,7 +30,7 @@ module.exports = {
         }
 
         var name = req.body.name;
-        RoomService.createRoom(name, req.session.userId)
+        RoomService.createRoom(name, req.session.user.id)
             .then((room) => {
                 console.log('Room %s was created.', name);
                 return res.json(room);
