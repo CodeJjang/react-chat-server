@@ -22,7 +22,7 @@ class UserBox extends Component {
 		   	},
 			success: function(users) {
 				this.setState( {
-					users: users
+					users: [{nickname:'Jogn', id:'1'}, {id:'2',nickname:'dfdsjfosfjdosfjsodjfsodjfdsdsfsdfdsfdsfdsf'}]
 				} );
 			}.bind( this ),
 			error: function(xhr, status, err) {
@@ -46,6 +46,7 @@ class UserBox extends Component {
 	render() {
 		return (
 			<div className='UserBox'>
+				<h4>Online Users</h4>
 				<UserList users={this.state.users}/>
 			</div>
 			);
