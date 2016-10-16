@@ -13,7 +13,7 @@ class NavigationBar extends Component {
 						<Link to='/chat'>Chat</Link>
 					</Navbar.Brand>
 					<Navbar.Brand>
-						<Link to='/rooms'>Rooms</Link>
+						<Link to='/about'>About</Link>
 					</Navbar.Brand>
 					<Navbar.Toggle />
 				</Navbar.Header>
