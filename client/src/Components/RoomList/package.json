@@ -1,8 +1,8 @@
 {
-  "name": "rooms",
+  "name": "room-list",
   "version": "1.0.0",
   "description": "",
-  "main": "Rooms.js",
+  "main": "RoomList.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },

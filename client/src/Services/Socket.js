@@ -2,17 +2,22 @@ import SailsIOClient from 'sails.io.js';
 import SocketIOClient from 'socket.io-client';
 
 var _newCommentSyncEventName = 'sync_comments',
-    _newUserSyncEventName = 'sync_users';
+    _newUserSyncEventName = 'sync_users',
+    _newRoomSyncEventName = 'sync_rooms';
 
 class Socket {
     constructor(props) {
         this.io = SailsIOClient(SocketIOClient);
         this.io.sails.url = props.url;
+        
         this._commentsSyncCallback = null;
         this._usersSyncCallback = null;
+        this._roomsSyncCallback = null;
+
         this._listenToSync = this._listenToSync.bind(this);
         this._listenToCommentsSync = this._listenToCommentsSync.bind(this);
         this._listenToUsersSync = this._listenToUsersSync.bind(this);
+        this._listenToRoomsSync = this._listenToRoomsSync.bind(this);
         this.joinGlobalRoom = this.joinGlobalRoom.bind(this);
     }
     joinGlobalRoom() {
@@ -37,6 +42,7 @@ class Socket {
     _listenToSync() {
         this._listenToCommentsSync();
         this._listenToUsersSync();
+        this._listenToRoomsSync();
     }
 
     _listenToCommentsSync() {
@@ -55,6 +61,14 @@ class Socket {
         });
     }
 
+    _listenToRoomsSync() {
+        var self = this;
+        this.io.socket.on(_newRoomSyncEventName, function(data) {
+            console.log('Received rooms sync message.');
+            self._roomsSyncCallback();
+        });
+    }
+
     set commentsSyncCallback(cb) {
         if (cb) {
             this._commentsSyncCallback = cb;
@@ -64,6 +78,12 @@ class Socket {
     set usersSyncCallback(cb) {
         if (cb) {
             this._usersSyncCallback = cb;
+        }
+    }
+
+    set roomsSyncCallback(cb) {
+        if (cb) {
+            this._roomsSyncCallback = cb;
         }
     }
 }

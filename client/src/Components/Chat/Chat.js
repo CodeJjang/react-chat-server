@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import CommentBox from '../CommentBox';
 import UserBox from '../UserBox';
+import RoomBox from '../RoomBox';
 
 class Chat extends Component {
 	constructor(props) {
@@ -28,6 +29,7 @@ class Chat extends Component {
 			<div>
 				<UserBox authenticated={this.state.authenticated} socket={ this.props.socket } />
 				<CommentBox authenticated={this.state.authenticated} socket={ this.props.socket } />
+				<RoomBox authenticated={this.state.authenticated} socket={ this.props.socket } />
 			</div>
 			);
 	}
