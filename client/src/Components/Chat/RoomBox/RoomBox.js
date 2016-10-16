@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import $ from 'jquery';
-import RoomList from '../RoomList';
+import RoomList from './RoomList';
 import './RoomBox.css';
 
 class Rooms extends Component {

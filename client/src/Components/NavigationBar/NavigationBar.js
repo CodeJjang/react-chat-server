@@ -10,7 +10,7 @@ class NavigationBar extends Component {
 				<Navbar.Header className='App-header'>
 					<img src={ logo } className='App-logo' alt='logo' />
 					<Navbar.Brand>
-						<Link to='/chat'>Chat</Link>
+						<Link to='/'>Chat</Link>
 					</Navbar.Brand>
 					<Navbar.Brand>
 						<Link to='/about'>About</Link>

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import RoomEntry from '../RoomEntry';
+import RoomEntry from './RoomEntry';
 import './RoomList.css';
 
 class RoomList extends Component {

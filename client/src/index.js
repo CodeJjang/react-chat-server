@@ -13,6 +13,7 @@ ReactDOM.render(
     <Route path="/" component={App}>
     	<IndexRoute component={Chat}/>
     	<Route path="/chat" component={Chat}/>
+    	<Route path="/room/:id" component={Chat}/>
     	<Route path="/about" component={About}/>
     </Route>
   </Router>,

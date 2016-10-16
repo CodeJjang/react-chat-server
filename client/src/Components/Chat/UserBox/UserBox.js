@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import $ from 'jquery';
-import UserList from '../UserList';
+import UserList from './UserList';
 import './UserBox.css';
 
 class UserBox extends Component {

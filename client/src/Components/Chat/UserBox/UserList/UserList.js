@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import UserEntry from '../UserEntry';
+import UserEntry from './UserEntry';
 import './UserList.css';
 
 class UserList extends Component {
