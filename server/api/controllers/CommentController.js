@@ -13,14 +13,14 @@ module.exports = {
 
         var author = req.body.author;
         var text = req.body.text;
-        var room = req.body.room;
+        var roomId = req.body.roomId;
 
         UserService.updateUser(req.session.user.id, author)
             .then((user) => {
                 if (user.length == 0) {
                     return Promise.reject(new Error('No user was found.'));
                 }
-                return RoomService.sendComment(user[0], text, room);
+                return RoomService.sendComment(user[0], text, roomId);
             })
             .then((comment) => {
                 res.json(comment);

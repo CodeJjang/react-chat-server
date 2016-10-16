@@ -16,7 +16,11 @@ module.exports = {
   	text: {
   		type: 'string',
   		required: true
-  	}
+  	},
+    roomId: {
+      type: 'string',
+      required: true
+    }
   }
 };
 

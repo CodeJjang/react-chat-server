@@ -1,9 +1,10 @@
-module.exports.createComment = function(user, text) {
-	console.log('Creating comment:', user.nickname, text);
+module.exports.createComment = function(user, text, roomId) {
+	console.log('Creating comment of user %s and roomId %s: %s', user.nickname, roomId, text);
 
 	return Comment.create({
 		author: user.nickname,
-		text: text
+		text: text,
+		roomId: roomId
 	});
 };
 

@@ -11,9 +11,10 @@ module.exports.createRoom = function(roomName, ownerId) {
     });
 }
 
-module.exports.findRoom = function(params) {
+function findRoom(params) {
     return Room.find(params);
 }
+module.exports.findRoom = findRoom;
 
 module.exports.createGlobalRoomIfNotExists = function() {
     return Room.findOrCreate({
@@ -29,15 +30,24 @@ module.exports.joinGlobalRoom = function(req) {
         .then(joinRoom(req, _globalRoomName));
 }
 
-module.exports.sendComment = function(user, text, room) {
-    var createCommentPromise = CommentService.createComment(user, text);
+module.exports.sendComment = function(user, text, roomId) {
+    var createCommentPromise = CommentService.createComment(user, text, roomId);
 
-    if (!room) {
+    if (!roomId) {
         return createCommentPromise
             .then(sendSyncToRoom(_globalRoomName, _newCommentSyncEventName));
     } else {
-        return createCommentPromise
-            .then(sendSyncToRoom(room, _newCommentSyncEventName));
+        var _room;
+        return findRoom(roomId)
+            .then(room => {
+                if(room && room.length === 1) {
+                    _room = room;
+                    return createCommentPromise;
+                }
+
+                return Promise.reject(new Error('No single room was found.'));
+            })
+            .then(() => sendSyncToRoom(_room.name, _newCommentSyncEventName));
     }
 }
 
