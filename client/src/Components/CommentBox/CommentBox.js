@@ -41,11 +41,11 @@ class CommentBox extends Component {
 	postComment(comment) {
 		$.ajax( {
 			url: this.state.commentsApiUrl,
-			dataType: 'json',
 			xhrFields: {
 		    	withCredentials: true
 		   	},
 			type: 'POST',
+			dataType: 'json',
 			data: comment,
 			success: function(comment) {
 				this.setState( {

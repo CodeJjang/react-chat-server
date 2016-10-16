@@ -151,10 +151,8 @@ module.exports.sockets = {
 
 function performCleanup(session) {
     if (session.user) {
-        var roomId = session.user.currentRoomId;
-
         return deleteUser(session)
-            .then(sendUserSync(roomId));
+            .then(sendUserSync);
     }
 
     console.log('No user was deleted since user was already undefined.');
@@ -170,15 +168,6 @@ function deleteUser(session) {
         })
 }
 
-function sendUserSync(roomId) {
-    return RoomService.findRoom({
-            id: roomId
-        })
-        .then((room) => {
-            if(room && room.length === 1) {
-                return RoomService.sendUserSyncToRoom(room[0].name);    
-            }
-            
-            return Promise.reject(new Error('User\'s room was not found or found too many.'));
-        })
+function sendUserSync() {
+    return RoomService.sendUserSyncToAllRooms();
 }

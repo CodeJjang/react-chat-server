@@ -8,18 +8,21 @@
 module.exports = {
     create: function(req, res, next) {
         if (!validateCreateParams(req.body)) {
-            next(new Error('Some parameters are missing.'));
+            return next(new Error('Some parameters are missing.'));
         }
 
         var author = req.body.author;
         var text = req.body.text;
         var roomId = req.body.roomId;
 
+        var oldNickname = req.session.user.nickname;
+
         UserService.updateUser(req.session.user.id, author)
             .then((user) => {
-                if (user.length == 0) {
-                    return Promise.reject(new Error('No user was found.'));
+                if (user.length !== 1) {
+                    return Promise.reject(new Error('No user was found or several users were found.'));
                 }
+                req.session.user = user[0];
                 return RoomService.sendComment(user[0], text, roomId);
             })
             .then((comment) => {
@@ -28,7 +31,7 @@ module.exports = {
             })
             .then(() => {
                 // case user nickname updated
-                if (author.localeCompare(req.session.user.nickname) !== 0) {
+                if (author.localeCompare(oldNickname) !== 0) {
                     syncUserUpdated(req);
                 }
                 return Promise.resolve();
@@ -62,16 +65,7 @@ function validateCreateParams(body) {
 }
 
 function syncUserUpdated(req) {
-    RoomService.findRoom({
-            id: req.session.user.currentRoomId
-        })
-        .then((room) => {
-            if(room && room.length === 1) {
-                return RoomService.sendUserSyncToRoom(room[0].name);    
-            }
-            
-            return Promise.reject(new Error('User\'s room was not found or found too many.'));
-        })
+    RoomService.sendUserSyncToAllRooms()
         .catch((err) => {
             if (err) {
                 console.log('Error in sending sync regarding updated user.');

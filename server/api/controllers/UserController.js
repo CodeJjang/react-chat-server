@@ -13,7 +13,8 @@ module.exports = {
             .then((room) => {
                 if (room && room.length === 1) {
                     return UserService.findUser({
-                        currentRoomId: room[0].id
+                        currentRoomId: room[0].id,
+                        nickname: {'!': null}
                     });
                 }
 

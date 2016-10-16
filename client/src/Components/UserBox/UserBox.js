@@ -21,8 +21,11 @@ class UserBox extends Component {
 		    	withCredentials: true
 		   	},
 			success: function(users) {
+				// this.setState( {
+				// 	users: [{nickname:'Jogn', id:'1'}, {id:'2',nickname:'dfdsjfosfjdosfjsodjfsodjfdsdsfsdfdsfdsfdsf'}]
+				// } );
 				this.setState( {
-					users: [{nickname:'Jogn', id:'1'}, {id:'2',nickname:'dfdsjfosfjdosfjsodjfsodjfdsdsfsdfdsfdsfdsf'}]
+					users: users
 				} );
 			}.bind( this ),
 			error: function(xhr, status, err) {

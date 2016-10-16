@@ -41,6 +41,21 @@ module.exports = {
                     next(err);
                 }
             });
+    },
+
+    find: function(req, res, next) {
+        RoomService.findRoom({
+                name: { '!': RoomService.getGlobalRoomName() }
+            })
+            .then(rooms => {
+                return res.json(rooms);
+            })
+            .catch(err => {
+                if (err) {
+                    console.log(err);
+                    next(err);
+                }
+            })
     }
 };
 

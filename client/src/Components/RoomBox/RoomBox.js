@@ -22,7 +22,7 @@ class Rooms extends Component {
 		   	},
 			success: function(rooms) {
 				this.setState( {
-					rooms: [{name:'Global', id:'1'}, {id:'2',name:'dfdsjfosfjdosfjsodjfsodjfdsdsfsdfdsfdsfdsf'}]
+					rooms: rooms
 				} );
 			}.bind( this ),
 			error: function(xhr, status, err) {
