@@ -31,24 +31,24 @@ module.exports.joinGlobalRoom = function(req) {
 }
 
 module.exports.sendComment = function(user, text, roomId) {
-    var createCommentPromise = CommentService.createComment(user, text, roomId);
-
+    var findParams;
     if (!roomId) {
-        return createCommentPromise
-            .then(sendSyncToRoom(_globalRoomName, _newCommentSyncEventName));
+        findParams.name = _globalRoomName;
     } else {
-        var _room;
-        return findRoom(roomId)
-            .then(room => {
-                if(room && room.length === 1) {
-                    _room = room;
-                    return createCommentPromise;
-                }
-
-                return Promise.reject(new Error('No single room was found.'));
-            })
-            .then(() => sendSyncToRoom(_room.name, _newCommentSyncEventName));
+        findParams.id = roomId;
     }
+
+    var _room;
+    return findRoom(findParams)
+        .then(room => {
+            if (room && room.length === 1) {
+                _room = room;
+                return CommentService.createComment(user, text, roomId);
+            }
+
+            return Promise.reject(new Error('No single room was found.'));
+        })
+        .then(() => sendSyncToRoom(_room.name, _newCommentSyncEventName));
 }
 
 module.exports.getGlobalRoomName = function() {

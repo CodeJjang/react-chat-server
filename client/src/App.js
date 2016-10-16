@@ -1,9 +1,7 @@
 import React, { Component } from 'react';
 import './App.css';
-
 import Socket from './Services/Socket';
 import NavigationBar from './Components/NavigationBar';
-import Chat from './Components/Chat';
 
 class App extends Component {
   constructor(props) {
@@ -16,7 +14,7 @@ class App extends Component {
     return (
       <div>
         <NavigationBar />
-        <Chat socket={this.state.socket}/>
+        {React.cloneElement(this.props.children, {socket: this.state.socket})}
       </div>
       );
   }

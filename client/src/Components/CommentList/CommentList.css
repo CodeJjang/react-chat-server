@@ -2,6 +2,6 @@
 	position: absolute;
 	top: 60px;
 	bottom: 40px;
-	overflow-y: scroll;
+	overflow-y: auto;
 	z-index: -1;
 }

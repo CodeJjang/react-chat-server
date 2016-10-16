@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Navbar } from 'react-bootstrap';
+import { Link } from 'react-router';
 import logo from '../../assets/logo.svg';
 
 class NavigationBar extends Component {
@@ -9,7 +10,10 @@ class NavigationBar extends Component {
 				<Navbar.Header className='App-header'>
 					<img src={ logo } className='App-logo' alt='logo' />
 					<Navbar.Brand>
-						<a href='#'>Chat</a>
+						<Link to='/chat'>Chat</Link>
+					</Navbar.Brand>
+					<Navbar.Brand>
+						<Link to='/rooms'>Rooms</Link>
 					</Navbar.Brand>
 					<Navbar.Toggle />
 				</Navbar.Header>
