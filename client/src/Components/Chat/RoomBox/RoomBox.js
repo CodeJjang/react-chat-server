@@ -21,8 +21,11 @@ class Rooms extends Component {
 		    	withCredentials: true
 		   	},
 			success: function(rooms) {
+				// this.setState( {
+				// 	rooms: rooms
+				// } );
 				this.setState( {
-					rooms: rooms
+					rooms: [{name:'Bar-Ilan',id:1}, {name:'Geekz',id:2}]
 				} );
 			}.bind( this ),
 			error: function(xhr, status, err) {

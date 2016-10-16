@@ -7,6 +7,7 @@ class RoomList extends Component {
 		var roomElements = this.props.rooms.map((room) => {
 			return (
 				<RoomEntry key={ room.id }
+					id={ room.id }
 					name={ room.name }  />
 				);
 		});
