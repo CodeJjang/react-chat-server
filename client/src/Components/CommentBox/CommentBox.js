@@ -39,6 +39,13 @@ class CommentBox extends Component {
 		} );
 	}
 	postComment(comment) {
+		// optimistic posting
+		var oldComments = this.state.comments;
+		comment.id = Date.now();
+		var newComments = oldComments.concat([comment]);
+		this.setState( {
+			comments: newComments
+		} );
 		$.ajax( {
 			url: this.state.commentsApiUrl,
 			xhrFields: {
@@ -49,10 +56,13 @@ class CommentBox extends Component {
 			data: comment,
 			success: function(comment) {
 				this.setState( {
-					comment: comment
-				} );
+					comments: oldComments.concat([comment])
+				});
 			}.bind( this ),
 			error: function(xhr, status, err) {
+				this.setState( {
+					comments: oldComments
+				});
 				console.error( this.state.commentsApiUrl, status, err.toString() );
 			}.bind( this )
 		} );
