@@ -5,20 +5,22 @@ var _globalRoomName = 'Global',
     _newUserSyncEventName = 'sync_users',
     _newRoomSyncEventName = 'sync_rooms';
 
+var _globalRoomId; // defined on run-time
+
 module.exports.createRoom = function(roomName, ownerId) {
     return Room.create({
-        roomName: roomName,
-        ownerId: ownerId
-    })
-    .then((room) => {
-        broadcastSyncToAllRooms(_newRoomSyncEventName)
-            .catch(err => {
-                if(err) {
-                    console.log(err);
-                }
-            })
-        return Promise.resolve(room);
-    })
+            roomName: roomName,
+            ownerId: ownerId
+        })
+        .then((room) => {
+            broadcastSyncToAllRooms(_newRoomSyncEventName)
+                .catch(err => {
+                    if (err) {
+                        console.log(err);
+                    }
+                })
+            return Promise.resolve(room);
+        })
 }
 
 function findRoom(params) {
@@ -28,16 +30,27 @@ module.exports.findRoom = findRoom;
 
 module.exports.createGlobalRoomIfNotExists = function() {
     return Room.findOrCreate({
-        name: _globalRoomName
-    }, {
-        name: _globalRoomName,
-        ownerId: 'none'
-    });
+            name: _globalRoomName
+        }, {
+            name: _globalRoomName,
+            ownerId: 'none'
+        })
+        .then(createdOrFoundRecords => {
+            if (createdOrFoundRecords && _.isArray(createdOrFoundRecords)) {
+                _globalRoomId = createdOrFoundRecords[0].id;
+            } else if (createdOrFoundRecords) {
+                _globalRoomId = createdOrFoundRecords.id;
+            } else {
+                return Promise.reject(new Error('Failed creating / finding global room.'));
+            }
+
+            return Promise.resolve();
+        });
 }
 
 module.exports.joinGlobalRoom = function(req) {
     return (req.session.user ? Promise.resolve() : createUser(req, _globalRoomName))
-        .then(joinRoom(req, _globalRoomName));
+        .then(joinRoom(req, _globalRoomId));
 }
 
 module.exports.sendComment = function(user, text, roomId) {
@@ -72,6 +85,55 @@ module.exports.sendUserSyncToAllRooms = function() {
     return broadcastSyncToAllRooms(_newUserSyncEventName);
 }
 
+function joinRoom(req, roomId) {
+    return findRoom({ id: roomId })
+        .then(room => {
+            return new Promise(function(resolve, reject) {
+                sails.sockets.join(req, room.name, function(err) {
+                    if (err) {
+                        return reject(err);
+                    }
+
+                    resolve();
+                });
+            });
+        })
+        .then(leaveRoom(req))
+        .then(() => {
+            return UserService.updateUser({ id: req.session.user.id }, { currentRoomId: roomId })
+                .then(() => {
+                    req.session.user.currentRoomId = roomId;
+                    return Promise.resolve();
+                });
+        })
+}
+module.exports.joinRoom = joinRoom;
+
+function leaveRoom(req) {
+    if(!req.session.user.currentRoomId) {
+        return Promise.resolve();
+    }
+    
+    return findRoom({ id: req.session.user.currentRoomId })
+        .then(rooms => {
+            if (rooms && rooms.length === 1) {
+                return Promise.resolve(rooms[0].name);
+            }
+
+            return Promise.reject(new Error('No room or multiple rooms were found.'));
+        })
+        .then(roomName => {
+            return new Promise(function(resolve, reject) {
+                sails.sockets.leave(req, roomName, function(err) {
+                    if (err) {
+                        return reject(err);
+                    }
+                    resolve();
+                });
+            });
+        });
+}
+
 function sendSyncToRoom(roomName, eventName) {
     console.log('Sending sync to room: %s, with event name: %s.', roomName, eventName);
     sails.sockets.broadcast(roomName, eventName);
@@ -102,15 +164,4 @@ function createUser(req, currentRoomName) {
             req.session.save();
             return Promise.resolve();
         });
-}
-
-function joinRoom(req, roomName) {
-    return new Promise(function(resolve, reject) {
-        sails.sockets.join(req, roomName, function(err) {
-            if (err) {
-                return reject(err);
-            }
-            resolve();
-        });
-    });
 }

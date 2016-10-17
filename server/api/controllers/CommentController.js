@@ -17,7 +17,7 @@ module.exports = {
 
         var oldNickname = req.session.user.nickname;
 
-        UserService.updateUser(req.session.user.id, author)
+        UserService.updateUser({id: req.session.user.id}, {nickname: author})
             .then((user) => {
                 if (user.length !== 1) {
                     return Promise.reject(new Error('No user was found or several users were found.'));

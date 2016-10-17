@@ -24,9 +24,31 @@ module.exports = {
             });
     },
 
+    join: function(req, res, next) {
+        if (!req.isSocket) {
+            return res.badRequest();
+        } else if (!validateJoinParams(req.body)) {
+            return next(new Error('Some parameters are missing.'));
+        }
+
+        var roomId = req.body.roomId;
+
+        RoomService.joinRoom(req, roomId)
+            .then(() => {
+                console.log('Someone joined room with id %s.', roomId);
+                return res.ok();
+            })
+            .catch((err) => {
+                if (err) {
+                    console.log(err);
+                    next(err);
+                }
+            });
+    },
+
     create: function(req, res, next) {
         if (!validateCreateParams(req.body)) {
-            next(new Error('Some parameters are missing.'));
+            return next(new Error('Some parameters are missing.'));
         }
 
         var name = req.body.name;
@@ -61,6 +83,14 @@ module.exports = {
 
 function validateCreateParams(body) {
     if (_.isUndefined(body.name)) {
+        return false;
+    }
+
+    return true;
+}
+
+function validateJoinParams() {
+    if (_.isUndefined(body.roomId)) {
         return false;
     }
 

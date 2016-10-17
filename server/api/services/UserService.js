@@ -1,11 +1,7 @@
-module.exports.updateUser = function(id, nickname) {
-	console.log('Updating user of id: %s, with nickname: %s', id, nickname);
+module.exports.updateUser = function(queryParams, updateParams) {
+	console.log('Updating user by: %s, with: %s', queryParams, updateParams);
 
-    return User.update({
-        id: id
-    }, {
-        nickname: nickname
-    });
+    return User.update(queryParams, updateParams);
 };
 
 module.exports.createUser = function(currentRoomId) {
