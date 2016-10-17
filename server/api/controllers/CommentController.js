@@ -17,15 +17,15 @@ module.exports = {
 
         var oldNickname = req.session.user.nickname;
 
-        UserService.updateUser({id: req.session.user.id}, {nickname: author})
-            .then((user) => {
+        UserService.updateUser({ id: req.session.user.id }, { nickname: author })
+            .then(user => {
                 if (user.length !== 1) {
                     return Promise.reject(new Error('No user was found or several users were found.'));
                 }
                 req.session.user = user[0];
                 return RoomService.sendComment(user[0], text, roomId);
             })
-            .then((comment) => {
+            .then(comment => {
                 res.json(comment);
                 return Promise.resolve();
             })
@@ -44,12 +44,13 @@ module.exports = {
     },
 
     find: function(req, res, next) {
-        CommentService.findComment()
-            .then((comments) => {
+        var roomId = req.query.roomId || RoomService.getGlobalRoomId();
+        CommentService.findComment({ roomId: roomId })
+            .then(comments => {
                 res.json(comments);
                 return Promise.resolve();
             })
-            .catch((err) => {
+            .catch(err => {
                 console.log(err);
                 next(err);
             });
@@ -66,7 +67,7 @@ function validateCreateParams(body) {
 
 function syncUserUpdated(req) {
     RoomService.sendUserSyncToAllRooms()
-        .catch((err) => {
+        .catch(err => {
             if (err) {
                 console.log('Error in sending sync regarding updated user.');
                 console.log(err);

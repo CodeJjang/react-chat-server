@@ -24,6 +24,7 @@ class CommentBox extends Component {
 		return $.ajax( {
 			url: this.state.commentsApiUrl,
 			dataType: 'json',
+			data: { roomId: this.props.currentRoomId },
 			xhrFields: {
 		    	withCredentials: true
 		   	},
@@ -71,7 +72,7 @@ class CommentBox extends Component {
 		if(!prevProps.authenticated && this.props.authenticated) {
 			this.registerToCommentsSyncMessages()
 				.then(this.loadComments)
-				.catch((err)=> {
+				.catch(err => {
 					console.log(err);
 				});
 		}

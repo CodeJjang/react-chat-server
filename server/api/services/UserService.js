@@ -1,5 +1,5 @@
 module.exports.updateUser = function(queryParams, updateParams) {
-	console.log('Updating user by: %s, with: %s', queryParams, updateParams);
+	console.log('Updating user by: %s, with: %s', JSON.stringify(queryParams), JSON.stringify(updateParams));
 
     return User.update(queryParams, updateParams);
 };

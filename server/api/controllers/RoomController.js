@@ -16,7 +16,7 @@ module.exports = {
                 console.log('Someone joined global room.');
                 return res.ok();
             })
-            .catch((err) => {
+            .catch(err => {
                 if (err) {
                     console.log(err);
                     next(err);
@@ -38,7 +38,7 @@ module.exports = {
                 console.log('Someone joined room with id %s.', roomId);
                 return res.ok();
             })
-            .catch((err) => {
+            .catch(err => {
                 if (err) {
                     console.log(err);
                     next(err);
@@ -53,11 +53,11 @@ module.exports = {
 
         var name = req.body.name;
         RoomService.createRoom(name, req.session.user.id)
-            .then((room) => {
+            .then(room => {
                 console.log('Room %s was created.', name);
                 return res.json(room);
             })
-            .catch((err) => {
+            .catch(err => {
                 if (err) {
                     console.log(err);
                     next(err);

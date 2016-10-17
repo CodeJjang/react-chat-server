@@ -17,13 +17,11 @@ class UserBox extends Component {
 		return $.ajax( {
 			url: this.state.usersApiUrl,
 			dataType: 'json',
+			data: { roomId: this.props.currentRoomId },
 			xhrFields: {
 		    	withCredentials: true
 		   	},
 			success: function(users) {
-				// this.setState( {
-				// 	users: [{nickname:'Jogn', id:'1'}, {id:'2',nickname:'dfdsjfosfjdosfjsodjfsodjfdsdsfsdfdsfdsfdsf'}]
-				// } );
 				this.setState( {
 					users: users
 				} );
