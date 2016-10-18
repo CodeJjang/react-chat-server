@@ -11,7 +11,7 @@ class AddRoomPopover extends Component {
 				placement='left'
 				container={ this.props.container }
 				target={ this.props.target }>
-				<AddRoomContent/>
+				<AddRoomContent onRoomSubmit={this.props.onRoomSubmit}/>
 			</Overlay>
 			);
 	}

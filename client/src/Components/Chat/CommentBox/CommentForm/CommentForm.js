@@ -40,7 +40,6 @@ class CommentForm extends Component {
 	}
 	render() {
 		return (
-			
 			<Form inline className='CommentForm'>
 				<FormControl className='CommentForm-nickname'
 					type='text'

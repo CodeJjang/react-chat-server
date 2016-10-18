@@ -6,9 +6,9 @@ var _globalRoomName = 'Global',
     _newUserSyncEventName = 'sync_users',
     _newRoomSyncEventName = 'sync_rooms';
 
-module.exports.createRoom = function(roomName, ownerId) {
+module.exports.createRoom = function(name, ownerId) {
     return Room.create({
-            roomName: roomName,
+            name: name,
             ownerId: ownerId
         })
         .then(room => {

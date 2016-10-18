@@ -18,6 +18,7 @@ class Rooms extends Component {
 		this.registerToRoomsSyncMessages = this.registerToRoomsSyncMessages.bind( this );
 		this.toggleAddRoom = this.toggleAddRoom.bind(this);
 		this.onHide = this.onHide.bind(this);
+		this.handleRoomSubmit = this.handleRoomSubmit.bind(this);
 	}
 	loadRooms() {
 		return $.ajax( {
@@ -59,13 +60,37 @@ class Rooms extends Component {
 			showAddRoom: false
 		} );
 	}
+	handleRoomSubmit(room) {
+		var oldRooms = this.state.rooms;
+		$.ajax( {
+			url: this.state.roomsApiUrl,
+			xhrFields: {
+		    	withCredentials: true
+		   	},
+			type: 'POST',
+			dataType: 'json',
+			data: room,
+			success: function(room) {
+				this.setState( {
+					rooms: oldRooms.concat([room])
+				});
+			}.bind( this ),
+			error: function(xhr, status, err) {
+				this.setState( {
+					rooms: oldRooms
+				});
+				console.error( this.state.roomsApiUrl, status, err.toString() );
+			}.bind( this )
+		} );
+	}
 	render() {
 		return (
 			<div className='RoomsBox'>
 				<AddRoomPopover show={ this.state.showAddRoom }
 					onHide={ this.onHide }
 					container={ this }
-					target={ () => ReactDOM.findDOMNode( this._addButton ) } />
+					target={ () => ReactDOM.findDOMNode( this._addButton ) }
+					onRoomSubmit={ this.handleRoomSubmit } />
 				<AddButton ref={ (c) => this._addButton = c } onClickHandler={ this.toggleAddRoom } />
 				<h4>Rooms</h4>
 				<RoomList rooms={ this.state.rooms } />

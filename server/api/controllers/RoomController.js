@@ -85,7 +85,7 @@ function validateCreateParams(body) {
     if (_.isUndefined(body.name)) {
         return false;
     }
-
+    
     return true;
 }
 
