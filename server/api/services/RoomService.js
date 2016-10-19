@@ -58,13 +58,18 @@ module.exports.sendComment = function(user, text, roomId) {
     var _room;
     return findRoomPromise
         .then(room => {
-            if (room && room.length === 1) {
+            if (room && _.isArray(room) && room.length === 1) {
                 _room = room[0];
-                return CommentService.createComment(user, text, room[0].id);
+                return Promise.resolve(_room);
+            }
+            else if(room && !_.isArray(room)) {
+                _room = room;
+                return Promise.resolve(_room)
             }
 
-            return Promise.reject(new Error('No single room was found.'));
+            return Promise.reject(new Error('No single room was found or multiple rooms were found.'));
         })
+        .then(room => CommentService.createComment(user, text, room.id))
         .then(comment => {
             sendSyncToRoom(_room.name, _newCommentSyncEventName)
             return Promise.resolve(comment);
@@ -85,7 +90,8 @@ module.exports.sendUserSyncToAllRooms = function() {
 
 function joinRoom(req, roomId) {
     console.log('Attempting to join room with id:', roomId);
-    return findRoomById(roomId)
+    return (req.session.user ? Promise.resolve() : createUser(req, roomId))
+        .then(()=> findRoomById(roomId))
         .then(room => {
             return new Promise(function(resolve, reject) {
                 sails.sockets.join(req, room.name, function(err) {
@@ -116,12 +122,12 @@ module.exports.joinRoom = joinRoom;
 function leaveRoom(req) {
     console.log('Attempting to leave room with id:', req.session.user.currentRoomId);
     return findRoomById(req.session.user.currentRoomId)
-        .then(rooms => {
-            if (rooms && rooms.length === 1) {
-                return Promise.resolve(rooms[0].name);
+        .then(room => {
+            if (room) {
+                return Promise.resolve(room.name);
             }
 
-            return Promise.reject(new Error('No room or multiple rooms were found.'));
+            return Promise.reject(new Error('No room was found.'));
         })
         .then(roomName => {
             return new Promise(function(resolve, reject) {

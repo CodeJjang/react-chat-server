@@ -7,10 +7,10 @@
 
 module.exports = {
     joinGlobalRoom: function(req, res, next) {
-        if (!req.isSocket) {
+        if (!req.isSocket || !req.method === 'POST') {
             return res.badRequest();
         }
-
+        
         RoomService.joinGlobalRoom(req)
             .then(() => {
                 console.log('Someone joined global room.');
@@ -25,14 +25,13 @@ module.exports = {
     },
 
     join: function(req, res, next) {
-        if (!req.isSocket) {
+        if (!req.isSocket || !req.method === 'POST') {
             return res.badRequest();
         } else if (!validateJoinParams(req.body)) {
             return next(new Error('Some parameters are missing.'));
         }
-
+        
         var roomId = req.body.roomId;
-
         RoomService.joinRoom(req, roomId)
             .then(() => {
                 console.log('Someone joined room with id %s.', roomId);
@@ -89,7 +88,7 @@ function validateCreateParams(body) {
     return true;
 }
 
-function validateJoinParams() {
+function validateJoinParams(body) {
     if (_.isUndefined(body.roomId)) {
         return false;
     }

@@ -29,7 +29,8 @@ module.exports.policies = {
   // '*': true,
   '*': 'sessionAuth',
   RoomController: {
-    joinGlobalRoom: true
+    joinGlobalRoom: true,
+    join: true
   }
   /***************************************************************************
   *                                                                          *

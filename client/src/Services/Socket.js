@@ -9,7 +9,7 @@ class Socket {
     constructor(props) {
         this.io = SailsIOClient(SocketIOClient);
         this.io.sails.url = props.url;
-        
+
         this._commentsSyncCallback = null;
         this._usersSyncCallback = null;
         this._roomsSyncCallback = null;
@@ -19,12 +19,13 @@ class Socket {
         this._listenToUsersSync = this._listenToUsersSync.bind(this);
         this._listenToRoomsSync = this._listenToRoomsSync.bind(this);
         this.joinGlobalRoom = this.joinGlobalRoom.bind(this);
+        this.joinRoom = this.joinRoom.bind(this);
     }
     joinGlobalRoom() {
         var self = this;
         return new Promise(function(resolve, reject) {
             console.log('Attempting to join global room...');
-            self.io.socket.get('/room/joinGlobalRoom', function(body, JWR) {
+            self.io.socket.post('/room/joinGlobalRoom', function(body, JWR) {
                 if (JWR.statusCode !== 200) {
                     console.log('Failed joining global room.');
                     console.log('Sails responded with: ', body);
@@ -37,6 +38,28 @@ class Socket {
                     resolve();
                 }
             });
+        });
+    }
+    joinRoom(roomId) {
+        var self = this;
+        return new Promise(function(resolve, reject) {
+            console.log('Attempting to join room of id %s...', roomId);
+            self.io.socket.post(
+                '/room/join',
+                { roomId: roomId },
+                function(body, JWR) {
+                    if (JWR.statusCode !== 200) {
+                        console.log('Failed joining room with id %s.', roomId);
+                        console.log('Sails responded with: ', body);
+                        console.log('with headers: ', JWR.headers);
+                        console.log('and with status code: ', JWR.statusCode);
+                        reject();
+                    } else {
+                        console.log('Joined room with id %s.', roomId);
+                        self._listenToSync();
+                        resolve();
+                    }
+                });
         });
     }
     _listenToSync() {
