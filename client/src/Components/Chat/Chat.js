@@ -148,6 +148,9 @@ class Chat extends Component {
 		} );
 	}
 	postComment(comment) {
+		// add roomId to comment
+		comment.roomId = this.props.params.id;
+		
 		// optimistic posting
 		var oldComments = this.state.comments;
 		comment.id = Date.now();

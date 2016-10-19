@@ -116,6 +116,7 @@ function joinRoom(req, roomId) {
             req.session.user.currentRoomId = roomId;
             return saveSessionAsPromise(req.session);
         })
+        .then(() => broadcastSyncToAllRooms(_newUserSyncEventName));
 }
 module.exports.joinRoom = joinRoom;
 
