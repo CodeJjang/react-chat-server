@@ -39,6 +39,8 @@ class Chat extends Component {
 		this.registerToSyncMessages = this.registerToSyncMessages.bind(this);
 		this.loadData = this.loadData.bind(this);
 
+		this.requests = [];
+
 	}
 	joinRoom() {
 		(this.props.params.id
@@ -94,7 +96,7 @@ class Chat extends Component {
 			.then(this.loadRooms);
 	}
 	loadRooms() {
-		return $.ajax( {
+		var req = $.ajax( {
 			url: this.state.roomsApiUrl,
 			dataType: 'json',
 			xhrFields: {
@@ -109,9 +111,11 @@ class Chat extends Component {
 				console.error( this.state.roomsApiUrl, status, err.toString() );
 			}.bind( this )
 		} );
+		this.requests.push(req);
+		return req;
 	}
 	loadUsers() {
-		return $.ajax( {
+		var req = $.ajax( {
 			url: this.state.usersApiUrl,
 			dataType: 'json',
 			data: { roomId: this.props.params.id },
@@ -127,9 +131,11 @@ class Chat extends Component {
 				console.error( this.state.usersApiUrl, status, err.toString() );
 			}.bind( this )
 		} );
+		this.requests.push(req);
+		return req;
 	}
 	loadComments() {
-		return $.ajax( {
+		var req = $.ajax( {
 			url: this.state.commentsApiUrl,
 			dataType: 'json',
 			data: { roomId: this.props.params.id },
@@ -146,6 +152,8 @@ class Chat extends Component {
 				console.error( this.state.commentsApiUrl, status, err.toString() );
 			}.bind( this )
 		} );
+		this.requests.push(req);
+		return req;
 	}
 	postComment(comment) {
 		// add roomId to comment
@@ -158,7 +166,7 @@ class Chat extends Component {
 		this.setState( {
 			comments: newComments
 		} );
-		$.ajax( {
+		var req = $.ajax( {
 			url: this.state.commentsApiUrl,
 			xhrFields: {
 		    	withCredentials: true
@@ -178,10 +186,12 @@ class Chat extends Component {
 				console.error( this.state.commentsApiUrl, status, err.toString() );
 			}.bind( this )
 		} );
+		this.requests.push(req);
+		return req;
 	}
 	postRoom(room) {
 		var oldRooms = this.state.rooms;
-		$.ajax( {
+		var req = $.ajax( {
 			url: this.state.roomsApiUrl,
 			xhrFields: {
 		    	withCredentials: true
@@ -201,12 +211,17 @@ class Chat extends Component {
 				console.error( this.state.roomsApiUrl, status, err.toString() );
 			}.bind( this )
 		} );
+		this.requests.push(req);
+		return req;
 	}
 	handleRoomSubmit(room) {
 		this.postRoom(room);
 	}
 	handleCommentSubmit(comment) {
 		this.postComment( comment );
+	}
+	componentWillUnmount() {
+		this.requests.forEach((req) => req.abort());
 	}
 	render() {
 		return (

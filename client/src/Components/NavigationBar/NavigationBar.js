@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import { Navbar } from 'react-bootstrap';
-import { Link } from 'react-router';
+import { Navbar, Nav, NavItem } from 'react-bootstrap';
+import { LinkContainer, IndexLinkContainer } from 'react-router-bootstrap';
 import logo from '../../assets/logo.svg';
 
 class NavigationBar extends Component {
@@ -10,13 +10,24 @@ class NavigationBar extends Component {
 				<Navbar.Header className='App-header'>
 					<img src={ logo } className='App-logo' alt='logo' />
 					<Navbar.Brand>
-						<Link to='/'>Chat</Link>
-					</Navbar.Brand>
-					<Navbar.Brand>
-						<Link to='/about'>About</Link>
+						React-Chat
 					</Navbar.Brand>
 					<Navbar.Toggle />
 				</Navbar.Header>
+				<Navbar.Collapse>
+					<Nav>
+						<IndexLinkContainer to='/'>
+							<NavItem eventKey={1}>
+								Chat
+							</NavItem>
+						</IndexLinkContainer>
+						<LinkContainer to='/about'>
+							<NavItem eventKey={2}>
+								About
+							</NavItem>
+						</LinkContainer>
+					</Nav>
+				</Navbar.Collapse>
 			</Navbar>
 			);
 	}
