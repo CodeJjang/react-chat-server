@@ -8,7 +8,6 @@ class Chat extends Component {
 	constructor(props) {
 		super( props );
 		this.state = {
-			authenticated: false,
 			commentsApiUrl: 'http://localhost:1337/comment',
 			usersApiUrl: 'http://localhost:1337/user',
 			roomsApiUrl: 'http://localhost:1337/room',
@@ -22,14 +21,17 @@ class Chat extends Component {
 		this.postComment = this.postComment.bind( this );
 		this.handleCommentSubmit = this.handleCommentSubmit.bind( this );
 		this.registerToCommentsSyncMessages = this.registerToCommentsSyncMessages.bind(this);
+		this.unregisterToCommentsSyncMessages = this.unregisterToCommentsSyncMessages.bind(this);
 
 		// users methods
 		this.loadUsers = this.loadUsers.bind( this );		
 		this.registerToUsersSyncMessages = this.registerToUsersSyncMessages.bind(this);
+		this.unregisterToUsersSyncMessages = this.unregisterToUsersSyncMessages.bind(this);
 
 		// rooms methods
 		this.loadRooms = this.loadRooms.bind( this );
 		this.registerToRoomsSyncMessages = this.registerToRoomsSyncMessages.bind( this );
+		this.unregisterToRoomsSyncMessages = this.unregisterToRoomsSyncMessages.bind( this );
 		this.postRoom = this.postRoom.bind(this);
 		this.handleRoomSubmit = this.handleRoomSubmit.bind(this);
 
@@ -37,6 +39,7 @@ class Chat extends Component {
 		this.joinRoom = this.joinRoom.bind(this);
 		this.onAuthenticated = this.onAuthenticated.bind(this);
 		this.registerToSyncMessages = this.registerToSyncMessages.bind(this);
+		this.unregisterToSyncMessages = this.unregisterToSyncMessages.bind(this);
 		this.loadData = this.loadData.bind(this);
 
 		this.requests = [];
@@ -47,10 +50,7 @@ class Chat extends Component {
 			? this.props.socket.joinRoom(this.props.params.id)
 			: this.props.socket.joinGlobalRoom())
 				.then( () => {
-					this.setState( {
-						authenticated: true
-					} );
-					this.onAuthenticated();
+					return this.onAuthenticated();
 				} )
 				.catch( err => {
 					if (err) {
@@ -61,33 +61,46 @@ class Chat extends Component {
 	componentDidMount() {
 		this.joinRoom();
 	}
-	componentDidUpdate(prevProps, prevState) {
-		if(prevProps.params.id !== this.props.params.id) {
-			this.joinRoom();
-		}
+	componentWillUnmount() {
+		this.unregisterToSyncMessages();
+		this.requests.forEach((req) => req.abort());
 	}
 	onAuthenticated() {
-		this.registerToSyncMessages()
-			.then(this.loadData)
-			.catch(err => {
-					console.log(err);
-				});
+		return this.registerToSyncMessages()
+			.then(this.loadData);
 	}
 	registerToSyncMessages() {
 		return this.registerToCommentsSyncMessages()
 			.then(this.registerToUsersSyncMessages)
 			.then(this.registerToRoomsSyncMessages);
 	}
+	unregisterToSyncMessages() {
+		return this.unregisterToCommentsSyncMessages()
+			.then(this.unregisterToUsersSyncMessages)
+			.then(this.unregisterToRoomsSyncMessages);	
+	}
 	registerToCommentsSyncMessages() {
 		this.props.socket.commentsSyncCallback = this.loadComments;
+		return Promise.resolve();
+	}
+	unregisterToCommentsSyncMessages() {
+		this.props.socket.commentsSyncCallback = undefined;
 		return Promise.resolve();
 	}
 	registerToUsersSyncMessages() {
 		this.props.socket.usersSyncCallback = this.loadUsers;
 		return Promise.resolve();
 	}
+	unregisterToUsersSyncMessages() {
+		this.props.socket.usersSyncCallback = undefined;
+		return Promise.resolve();
+	}
 	registerToRoomsSyncMessages() {
 		this.props.socket.roomsSyncCallback = this.loadRooms;
+		return Promise.resolve();
+	}
+	unregisterToRoomsSyncMessages() {
+		this.props.socket.roomsSyncCallback = undefined;
 		return Promise.resolve();
 	}
 	loadData() {
@@ -219,9 +232,6 @@ class Chat extends Component {
 	}
 	handleCommentSubmit(comment) {
 		this.postComment( comment );
-	}
-	componentWillUnmount() {
-		this.requests.forEach((req) => req.abort());
 	}
 	render() {
 		return (

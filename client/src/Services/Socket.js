@@ -72,7 +72,12 @@ class Socket {
         var self = this;
         this.io.socket.on(_newCommentSyncEventName, function(data) {
             console.log('Received comments sync message.');
-            self._commentsSyncCallback();
+            if(self._commentsSyncCallback) {
+                self._commentsSyncCallback();
+            }
+            else {
+                console.log('No callback is hooked.');
+            }
         });
     }
 
@@ -80,7 +85,12 @@ class Socket {
         var self = this;
         this.io.socket.on(_newUserSyncEventName, function(data) {
             console.log('Received users sync message.');
-            self._usersSyncCallback();
+            if(self._usersSyncCallback) {
+                self._usersSyncCallback();
+            }
+            else {
+                console.log('No callback is hooked.');
+            }
         });
     }
 
@@ -88,26 +98,25 @@ class Socket {
         var self = this;
         this.io.socket.on(_newRoomSyncEventName, function(data) {
             console.log('Received rooms sync message.');
-            self._roomsSyncCallback();
+            if(self._roomsSyncCallback) {
+                self._roomsSyncCallback();
+            }
+            else {
+                console.log('No callback is hooked.');
+            }
         });
     }
 
     set commentsSyncCallback(cb) {
-        if (cb) {
-            this._commentsSyncCallback = cb;
-        }
+        this._commentsSyncCallback = cb;
     }
 
     set usersSyncCallback(cb) {
-        if (cb) {
-            this._usersSyncCallback = cb;
-        }
+        this._usersSyncCallback = cb;
     }
 
     set roomsSyncCallback(cb) {
-        if (cb) {
-            this._roomsSyncCallback = cb;
-        }
+        this._roomsSyncCallback = cb;
     }
 }
 export default Socket;
