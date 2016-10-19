@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, PropTypes } from 'react';
 
 class UserEntry extends Component {
 	render() {
@@ -13,5 +13,9 @@ class UserEntry extends Component {
 			);
 	}
 }
+
+UserEntry.propTypes = {
+	nickname: PropTypes.string.isRequired
+};
 
 export default UserEntry;

@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, PropTypes } from 'react';
 import $ from 'jquery';
 import CommentBox from './CommentBox';
 import UserBox from './UserBox';
@@ -222,5 +222,12 @@ class Chat extends Component {
 			);
 	}
 }
+
+Chat.propTypes = {
+	params: PropTypes.shape({
+		id: PropTypes.string
+	}),
+	socket: PropTypes.object
+};
 
 export default Chat;

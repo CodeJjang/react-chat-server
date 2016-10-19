@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, PropTypes } from 'react';
 import { Link } from 'react-router';
 
 class UserEntry extends Component {
@@ -14,5 +14,9 @@ class UserEntry extends Component {
 			);
 	}
 }
+
+UserEntry.propTypes = {
+	name: PropTypes.string.isRequired
+};
 
 export default UserEntry;

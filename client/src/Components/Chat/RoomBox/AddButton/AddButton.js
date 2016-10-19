@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, PropTypes } from 'react';
 import { Button, Glyphicon } from 'react-bootstrap';
 import './AddButton.css';
 
@@ -15,5 +15,9 @@ class AddButton extends Component {
 			);
 	}
 }
+
+AddButton.propTypes = {
+	onClickHandler: PropTypes.func.isRequired
+};
 
 export default AddButton;

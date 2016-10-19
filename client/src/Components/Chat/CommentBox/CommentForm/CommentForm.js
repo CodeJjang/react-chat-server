@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, PropTypes } from 'react';
 import { Form, FormControl, Button } from 'react-bootstrap';
 import './CommentForm.css';
 
@@ -63,5 +63,9 @@ class CommentForm extends Component {
 			);
 	}
 }
+
+CommentForm.propTypes = {
+	onCommentSubmit: PropTypes.func.isRequired
+};
 
 export default CommentForm;

@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, PropTypes } from 'react';
 import Comment from './Comment';
 import './CommentList.css';
 
@@ -29,5 +29,16 @@ class CommentList extends Component {
 			);
 	}
 }
+
+CommentList.propTypes = {
+	comments: PropTypes.arrayOf(
+			PropTypes.shape({
+				id: PropTypes.string.isRequired,
+				author: PropTypes.string.isRequired,
+				text: PropTypes.string.isRequired,
+				createdAt: PropTypes.string.isRequired
+			})
+		).isRequired
+};
 
 export default CommentList;

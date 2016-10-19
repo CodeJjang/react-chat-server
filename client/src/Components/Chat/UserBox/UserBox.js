@@ -13,4 +13,8 @@ class UserBox extends Component {
 	}
 }
 
+UserBox.propTypes = {
+	users: UserList.propTypes.users
+};
+
 export default UserBox;

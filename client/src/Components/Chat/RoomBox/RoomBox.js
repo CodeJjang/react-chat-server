@@ -1,11 +1,11 @@
-import React, { Component } from 'react';
+import React, { Component, PropTypes } from 'react';
 import ReactDOM from 'react-dom';
 import RoomList from './RoomList';
 import AddButton from './AddButton';
 import AddRoomPopover from './AddRoomPopover';
 import './RoomBox.css';
 
-class Rooms extends Component {
+class RoomBox extends Component {
 	constructor(props) {
 		super( props );
 		this.state = {
@@ -40,4 +40,9 @@ class Rooms extends Component {
 	}
 }
 
-export default Rooms;
+RoomBox.propTypes = {
+	onRoomSubmit: PropTypes.func.isRequired,
+	rooms: RoomList.propTypes.rooms
+};
+
+export default RoomBox;

@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, PropTypes } from 'react';
 import CommentForm from './CommentForm';
 import CommentList from './CommentList';
 import './CommentBox.css';
@@ -16,5 +16,10 @@ class CommentBox extends Component {
 			);
 	}
 }
+
+CommentBox.propTypes = {
+	comments: CommentList.propTypes.comments,
+	onCommentSubmit: PropTypes.func.isRequired
+};
 
 export default CommentBox;

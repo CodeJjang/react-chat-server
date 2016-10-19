@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, PropTypes } from 'react';
 import { Overlay } from 'react-bootstrap';
 import AddRoomContent from './AddRoomContent';
 import './AddRoomPopover.css';
@@ -16,5 +16,12 @@ class AddRoomPopover extends Component {
 			);
 	}
 }
+
+AddRoomPopover.propTypes = {
+	show: PropTypes.bool.isRequired,
+	onHide: PropTypes.func.isRequired,
+	container: PropTypes.object.isRequired,
+	target: PropTypes.func.isRequired
+};
 
 export default AddRoomPopover;

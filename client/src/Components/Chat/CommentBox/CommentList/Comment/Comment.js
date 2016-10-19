@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, PropTypes } from 'react';
 import { Media } from 'react-bootstrap';
 import './Comment.css';
 import moment from 'moment';
@@ -22,5 +22,11 @@ class Comment extends Component {
 			);
 	}
 }
+
+Comment.propTypes = {
+	author: PropTypes.string.isRequired,
+	text: PropTypes.string.isRequired,
+	timestamp: PropTypes.string.isRequired
+};
 
 export default Comment;

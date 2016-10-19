@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, PropTypes } from 'react';
 import UserEntry from './UserEntry';
 import './UserList.css';
 
@@ -17,5 +17,14 @@ class UserList extends Component {
 			);
 	}
 }
+
+UserList.propTypes = {
+	users: PropTypes.arrayOf(
+			PropTypes.shape({
+				id: PropTypes.string.isRequired,
+				nickname: PropTypes.string.isRequired,
+			})
+		).isRequired
+};
 
 export default UserList;

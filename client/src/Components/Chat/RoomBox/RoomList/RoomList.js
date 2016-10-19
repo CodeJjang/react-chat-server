@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, PropTypes } from 'react';
 import RoomEntry from './RoomEntry';
 import './RoomList.css';
 
@@ -18,5 +18,14 @@ class RoomList extends Component {
 			);
 	}
 }
+
+RoomList.propTypes = {
+	rooms: PropTypes.arrayOf(
+			PropTypes.shape({
+				id: PropTypes.string.isRequired,
+				name: PropTypes.string.isRequired
+			})
+		).isRequired
+};
 
 export default RoomList;

@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, PropTypes } from 'react';
 import { Form, FormControl, Button } from 'react-bootstrap';
 import './AddRoomContent.css';
 
@@ -61,5 +61,9 @@ class AddRoomContent extends Component {
       );
   }
 }
+
+AddRoomContent.propTypes = {
+  onRoomSubmit: PropTypes.func.isRequired
+};
 
 export default AddRoomContent;
