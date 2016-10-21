@@ -1,7 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import CommentActions from '../../Actions/CommentActions';
+import * as CommentActions from '../../Actions/CommentActions';
 import $ from 'jquery';
 import CommentBox from './CommentBox';
 import UserBox from './UserBox';
@@ -258,8 +258,8 @@ Chat.propTypes = {
 		id: PropTypes.string
 	}),
 	socket: PropTypes.object,
-	comments: CommentBox.propTypes.comments.isRequired,
-	actions: PropTypes.object.isRequired
+	comments: CommentBox.propTypes.comments,
+	actions: PropTypes.object
 };
 
 function mapStateToProps(state, ownProps) {

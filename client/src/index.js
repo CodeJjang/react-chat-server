@@ -13,7 +13,7 @@ const store = ConfigureStore();
 ReactDOM.render(
 	<Provider store={store}>
 		<Router history={browserHistory}
-			routes={Routes} />,
+			routes={Routes} />
 	</Provider>,
 	document.getElementById('root')
 );
