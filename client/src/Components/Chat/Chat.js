@@ -1,4 +1,7 @@
 import React, { Component, PropTypes } from 'react';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import CommentActions from '../../Actions/CommentActions';
 import $ from 'jquery';
 import CommentBox from './CommentBox';
 import UserBox from './UserBox';
@@ -6,7 +9,7 @@ import RoomBox from './RoomBox';
 
 class Chat extends Component {
 	constructor(props) {
-		super( props );
+		super(props);
 		this.state = {
 			commentsApiUrl: 'http://localhost:1337/comment',
 			usersApiUrl: 'http://localhost:1337/user',
@@ -17,21 +20,21 @@ class Chat extends Component {
 		};
 
 		// comments methods
-		this.loadComments = this.loadComments.bind( this );
-		this.postComment = this.postComment.bind( this );
-		this.handleCommentSubmit = this.handleCommentSubmit.bind( this );
+		this.loadComments = this.loadComments.bind(this);
+		this.postComment = this.postComment.bind(this);
+		this.handleCommentSubmit = this.handleCommentSubmit.bind(this);
 		this.registerToCommentsSyncMessages = this.registerToCommentsSyncMessages.bind(this);
 		this.unregisterToCommentsSyncMessages = this.unregisterToCommentsSyncMessages.bind(this);
 
 		// users methods
-		this.loadUsers = this.loadUsers.bind( this );		
+		this.loadUsers = this.loadUsers.bind(this);
 		this.registerToUsersSyncMessages = this.registerToUsersSyncMessages.bind(this);
 		this.unregisterToUsersSyncMessages = this.unregisterToUsersSyncMessages.bind(this);
 
 		// rooms methods
-		this.loadRooms = this.loadRooms.bind( this );
-		this.registerToRoomsSyncMessages = this.registerToRoomsSyncMessages.bind( this );
-		this.unregisterToRoomsSyncMessages = this.unregisterToRoomsSyncMessages.bind( this );
+		this.loadRooms = this.loadRooms.bind(this);
+		this.registerToRoomsSyncMessages = this.registerToRoomsSyncMessages.bind(this);
+		this.unregisterToRoomsSyncMessages = this.unregisterToRoomsSyncMessages.bind(this);
 		this.postRoom = this.postRoom.bind(this);
 		this.handleRoomSubmit = this.handleRoomSubmit.bind(this);
 
@@ -49,14 +52,14 @@ class Chat extends Component {
 		(this.props.params.id
 			? this.props.socket.joinRoom(this.props.params.id)
 			: this.props.socket.joinGlobalRoom())
-				.then( () => {
-					return this.onAuthenticated();
-				} )
-				.catch( err => {
-					if (err) {
-						console.log( err );
-					}
-				} );
+			.then(() => {
+				return this.onAuthenticated();
+			})
+			.catch(err => {
+				if (err) {
+					console.log(err);
+				}
+			});
 	}
 	componentDidMount() {
 		this.joinRoom();
@@ -77,7 +80,7 @@ class Chat extends Component {
 	unregisterToSyncMessages() {
 		return this.unregisterToCommentsSyncMessages()
 			.then(this.unregisterToUsersSyncMessages)
-			.then(this.unregisterToRoomsSyncMessages);	
+			.then(this.unregisterToRoomsSyncMessages);
 	}
 	registerToCommentsSyncMessages() {
 		this.props.socket.commentsSyncCallback = this.loadComments;
@@ -109,121 +112,125 @@ class Chat extends Component {
 			.then(this.loadRooms);
 	}
 	loadRooms() {
-		var req = $.ajax( {
+		var req = $.ajax({
 			url: this.state.roomsApiUrl,
 			dataType: 'json',
 			xhrFields: {
 				withCredentials: true
 			},
 			success: function(rooms) {
-				this.setState( {
+				this.setState({
 					rooms: rooms
-				} );
-			}.bind( this ),
+				});
+			}.bind(this),
 			error: function(xhr, status, err) {
-				console.error( this.state.roomsApiUrl, status, err.toString() );
-			}.bind( this )
-		} );
+				console.error(this.state.roomsApiUrl, status, err.toString());
+			}.bind(this)
+		});
 		this.requests.push(req);
 		return req;
 	}
 	loadUsers() {
-		var req = $.ajax( {
+		var req = $.ajax({
 			url: this.state.usersApiUrl,
 			dataType: 'json',
-			data: { roomId: this.props.params.id },
+			data: {
+				roomId: this.props.params.id
+			},
 			xhrFields: {
-		    	withCredentials: true
-		   	},
+				withCredentials: true
+			},
 			success: function(users) {
-				this.setState( {
+				this.setState({
 					users: users
-				} );
-			}.bind( this ),
+				});
+			}.bind(this),
 			error: function(xhr, status, err) {
-				console.error( this.state.usersApiUrl, status, err.toString() );
-			}.bind( this )
-		} );
+				console.error(this.state.usersApiUrl, status, err.toString());
+			}.bind(this)
+		});
 		this.requests.push(req);
 		return req;
 	}
 	loadComments() {
-		var req = $.ajax( {
+		var req = $.ajax({
 			url: this.state.commentsApiUrl,
 			dataType: 'json',
-			data: { roomId: this.props.params.id },
+			data: {
+				roomId: this.props.params.id
+			},
 			xhrFields: {
-		    	withCredentials: true
-		   	},
+				withCredentials: true
+			},
 			success: function(comments) {
 				console.log('Comments loaded.');
-				this.setState( {
+				this.setState({
 					comments: comments
-				} );
-			}.bind( this ),
+				});
+			}.bind(this),
 			error: function(xhr, status, err) {
-				console.error( this.state.commentsApiUrl, status, err.toString() );
-			}.bind( this )
-		} );
+				console.error(this.state.commentsApiUrl, status, err.toString());
+			}.bind(this)
+		});
 		this.requests.push(req);
 		return req;
 	}
 	postComment(comment) {
 		// add roomId to comment
 		comment.roomId = this.props.params.id;
-		
+
 		// optimistic posting
-		var oldComments = this.state.comments;
+		const oldComments = this.state.comments;
 		comment.id = Date.now();
-		var newComments = oldComments.concat([comment]);
-		this.setState( {
+		const newComments = oldComments.concat([comment]);
+		this.setState({
 			comments: newComments
-		} );
-		var req = $.ajax( {
+		});
+		var req = $.ajax({
 			url: this.state.commentsApiUrl,
 			xhrFields: {
-		    	withCredentials: true
-		   	},
+				withCredentials: true
+			},
 			type: 'POST',
 			dataType: 'json',
 			data: comment,
 			success: function(comment) {
-				this.setState( {
+				this.setState({
 					comments: oldComments.concat([comment])
 				});
-			}.bind( this ),
+			}.bind(this),
 			error: function(xhr, status, err) {
-				this.setState( {
+				this.setState({
 					comments: oldComments
 				});
-				console.error( this.state.commentsApiUrl, status, err.toString() );
-			}.bind( this )
-		} );
+				console.error(this.state.commentsApiUrl, status, err.toString());
+			}.bind(this)
+		});
 		this.requests.push(req);
 		return req;
 	}
 	postRoom(room) {
 		var oldRooms = this.state.rooms;
-		var req = $.ajax( {
+		var req = $.ajax({
 			url: this.state.roomsApiUrl,
 			xhrFields: {
-		    	withCredentials: true
-		   	},
+				withCredentials: true
+			},
 			type: 'POST',
 			dataType: 'json',
 			data: room,
 			success: function(room) {
-				this.setState( {
+				this.setState({
 					rooms: oldRooms.concat([room])
 				});
-			}.bind( this ),
+			}.bind(this),
 			error: function(xhr, status, err) {
-				this.setState( {
+				this.setState({
 					rooms: oldRooms
 				});
-				console.error( this.state.roomsApiUrl, status, err.toString() );
-			}.bind( this )
-		} );
+				console.error(this.state.roomsApiUrl, status, err.toString());
+			}.bind(this)
+		});
 		this.requests.push(req);
 		return req;
 	}
@@ -231,17 +238,15 @@ class Chat extends Component {
 		this.postRoom(room);
 	}
 	handleCommentSubmit(comment) {
-		this.postComment( comment );
+		this.postComment(comment);
 	}
 	render() {
 		return (
 			<div>
 				<UserBox users={this.state.users} />
-				<CommentBox
-					onCommentSubmit={this.handleCommentSubmit}
+				<CommentBox onCommentSubmit={this.handleCommentSubmit}
 					comments={this.state.comments} />
-				<RoomBox 
-					onRoomSubmit={this.handleRoomSubmit}
+				<RoomBox onRoomSubmit={this.handleRoomSubmit}
 					rooms={this.state.rooms} />
 			</div>
 			);
@@ -252,7 +257,21 @@ Chat.propTypes = {
 	params: PropTypes.shape({
 		id: PropTypes.string
 	}),
-	socket: PropTypes.object
+	socket: PropTypes.object,
+	comments: CommentBox.propTypes.comments.isRequired,
+	actions: PropTypes.object.isRequired
 };
 
-export default Chat;
+function mapStateToProps(state, ownProps) {
+	return {
+		comments: state.comments
+	};
+}
+
+function mapDispatchToProps(dispatch) {
+	return {
+		actions: bindActionCreators(CommentActions, dispatch)
+	};
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Chat);
