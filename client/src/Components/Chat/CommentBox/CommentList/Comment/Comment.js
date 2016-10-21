@@ -13,9 +13,9 @@ class Comment extends Component {
 						<span className='Comment-timestamp'>{moment(this.props.timestamp).fromNow()}</span>
 					</Media.Heading>
 					<Media.Left>
-					<p >
-						{this.props.text}
-					</p>
+						<p>
+							{this.props.text}
+						</p>
 					</Media.Left>
 				</Media.Body>
 			</Media>

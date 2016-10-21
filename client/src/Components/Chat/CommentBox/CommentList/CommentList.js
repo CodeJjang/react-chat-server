@@ -14,17 +14,18 @@ class CommentList extends Component {
 		this.scrollDown();
 	}
 	render() {
-		var commentElements = this.props.comments.map( (comment) => {
+		const commentElements = this.props.comments.map((comment) => {
 			return (
-				<Comment key={ comment.id }
-					author={ comment.author }
-					text={ comment.text }
-					timestamp={ comment.createdAt } />
+				<Comment key={comment.id}
+					author={comment.author}
+					text={comment.text}
+					timestamp={comment.createdAt} />
 				);
-		} );
+		});
 		return (
-			<div ref={ (c) => this._commentsListDiv = c } className='CommentList'>
-				{ commentElements }
+			<div ref={(c) => this._commentsListDiv = c}
+				className='CommentList'>
+				{commentElements}
 			</div>
 			);
 	}
@@ -32,13 +33,13 @@ class CommentList extends Component {
 
 CommentList.propTypes = {
 	comments: PropTypes.arrayOf(
-			PropTypes.shape({
-				id: PropTypes.string.isRequired,
-				author: PropTypes.string.isRequired,
-				text: PropTypes.string.isRequired,
-				createdAt: PropTypes.string.isRequired
-			})
-		).isRequired
+		PropTypes.shape({
+			id: PropTypes.string.isRequired,
+			author: PropTypes.string.isRequired,
+			text: PropTypes.string.isRequired,
+			createdAt: PropTypes.string.isRequired
+		})
+	).isRequired
 };
 
 export default CommentList;

@@ -9,12 +9,12 @@
     "jsx": {
         "formatJSX": true, //Duh! that's the default
         "attrsOnSameLineAsTag": false, // move each attribute to its own line
-        "maxAttrsOnTag": 3, // if lower or equal than 3 attributes, they will be kept on a single line
+        "maxAttrsOnTag": 1, // if lower or equal than 3 attributes, they will be kept on a single line
         "firstAttributeOnSameLine": true, // keep the first attribute in the same line as the tag
         "formatJSXExpressions": true, // default true, if false jsxExpressions won't be recursively formatted
         "JSXExpressionsSingleLine": true, // default true, if false the JSXExpressions might span several lines
         "alignWithFirstAttribute": false, // do not align attributes with the first tag
-        "spaceInJSXExpressionContainers": " ", // default to one space. Make it empty if you don't like spaces between JSXExpressionContainers
+        "spaceInJSXExpressionContainers": "", // default to one space. Make it empty if you don't like spaces between JSXExpressionContainers
         "removeSpaceBeforeClosingJSX": false, // default false. if true <React.Something /> => <React.Something/>
         "htmlOptions": {
           // put here the options for js-beautify.html
@@ -34,13 +34,13 @@
     },
     "whiteSpace": {
         "before": {
-            "ArgumentList": 1,
+            "ArgumentList": 0,
             "ArgumentListObjectExpression": 1,
             "ArgumentListFunctionExpression": 1,
             "ArgumentListArrayExpression": 1
         },
         "after": {
-            "ArgumentList": 1,
+            "ArgumentList": 0,
             "ArgumentListObjectExpression": 1,
             "ArgumentListFunctionExpression": 1,
             "ArgumentListArrayExpression": 1

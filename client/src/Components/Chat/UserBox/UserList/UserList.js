@@ -4,15 +4,15 @@ import './UserList.css';
 
 class UserList extends Component {
 	render() {
-		var userElements= this.props.users.map((user) => {
+		const userElements = this.props.users.map((user) => {
 			return (
-				<UserEntry key={ user.id }
-					nickname={ user.nickname }  />
+				<UserEntry key={user.id}
+					nickname={user.nickname} />
 				);
 		});
 		return (
 			<div className='UserList'>
-				{ userElements }
+				{userElements}
 			</div>
 			);
 	}
@@ -20,11 +20,11 @@ class UserList extends Component {
 
 UserList.propTypes = {
 	users: PropTypes.arrayOf(
-			PropTypes.shape({
-				id: PropTypes.string.isRequired,
-				nickname: PropTypes.string.isRequired,
-			})
-		).isRequired
+		PropTypes.shape({
+			id: PropTypes.string.isRequired,
+			nickname: PropTypes.string.isRequired,
+		})
+	).isRequired
 };
 
 export default UserList;

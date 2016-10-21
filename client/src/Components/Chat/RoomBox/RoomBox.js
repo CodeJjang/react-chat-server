@@ -7,7 +7,7 @@ import './RoomBox.css';
 
 class RoomBox extends Component {
 	constructor(props) {
-		super( props );
+		super(props);
 		this.state = {
 			showAddRoom: false
 		};
@@ -15,26 +15,27 @@ class RoomBox extends Component {
 		this.onHide = this.onHide.bind(this);
 	}
 	toggleAddRoom() {
-		this.setState( {
+		this.setState({
 			showAddRoom: !this.state.showAddRoom
-		} );
+		});
 	}
 	onHide() {
-		this.setState( {
+		this.setState({
 			showAddRoom: false
-		} );
+		});
 	}
 	render() {
 		return (
 			<div className='RoomsBox'>
-				<AddRoomPopover show={ this.state.showAddRoom }
-					onHide={ this.onHide }
-					container={ this }
-					target={ () => ReactDOM.findDOMNode( this._addButton ) }
-					onRoomSubmit={ this.props.onRoomSubmit } />
-				<AddButton ref={ (c) => this._addButton = c } onClickHandler={ this.toggleAddRoom } />
+				<AddRoomPopover show={this.state.showAddRoom}
+					onHide={this.onHide}
+					container={this}
+					target={() => ReactDOM.findDOMNode(this._addButton)}
+					onRoomSubmit={this.props.onRoomSubmit} />
+				<AddButton ref={(c) => this._addButton = c}
+					onClickHandler={this.toggleAddRoom} />
 				<h4>Rooms</h4>
-				<RoomList rooms={ this.props.rooms } />
+				<RoomList rooms={this.props.rooms} />
 			</div>
 			);
 	}

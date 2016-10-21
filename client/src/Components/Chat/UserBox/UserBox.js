@@ -7,7 +7,7 @@ class UserBox extends Component {
 		return (
 			<div className='UserBox'>
 				<h4>Online Users</h4>
-				<UserList users={this.props.users}/>
+				<UserList users={this.props.users} />
 			</div>
 			);
 	}

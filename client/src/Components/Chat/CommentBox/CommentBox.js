@@ -10,8 +10,9 @@ class CommentBox extends Component {
 	render() {
 		return (
 			<div className='CommentBox'>
-				<CommentList ref={ (c) => this._commentList = c } comments={ this.props.comments }/>
-				<CommentForm onCommentSubmit={ this.props.onCommentSubmit } />
+				<CommentList ref={(c) => this._commentList = c}
+					comments={this.props.comments} />
+				<CommentForm onCommentSubmit={this.props.onCommentSubmit} />
 			</div>
 			);
 	}

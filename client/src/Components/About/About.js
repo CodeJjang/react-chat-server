@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Jumbotron, Media } from 'react-bootstrap';
 import './About.css';
-import profile from '../../assets/profile.jpg';
+import profile from '../../Assets/profile.jpg';
 
 class About extends Component {
 	render() {
@@ -10,9 +10,9 @@ class About extends Component {
 				<Jumbotron>
 					<Media>
 						<Media.Left>
-							<img width={ 150 }
-								height={ 150 }
-								src={ profile }
+							<img width={150}
+								height={150}
+								src={profile}
 								alt='Profile' />
 						</Media.Left>
 						<Media.Body>

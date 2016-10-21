@@ -4,16 +4,16 @@ import './RoomList.css';
 
 class RoomList extends Component {
 	render() {
-		var roomElements = this.props.rooms.map((room) => {
+		const roomElements = this.props.rooms.map((room) => {
 			return (
-				<RoomEntry key={ room.id }
-					id={ room.id }
-					name={ room.name }  />
+				<RoomEntry key={room.id}
+					id={room.id}
+					name={room.name} />
 				);
 		});
 		return (
 			<div className='RoomList'>
-				{ roomElements }
+				{roomElements}
 			</div>
 			);
 	}
@@ -21,11 +21,11 @@ class RoomList extends Component {
 
 RoomList.propTypes = {
 	rooms: PropTypes.arrayOf(
-			PropTypes.shape({
-				id: PropTypes.string.isRequired,
-				name: PropTypes.string.isRequired
-			})
-		).isRequired
+		PropTypes.shape({
+			id: PropTypes.string.isRequired,
+			name: PropTypes.string.isRequired
+		})
+	).isRequired
 };
 
 export default RoomList;

@@ -3,13 +3,15 @@ import { Link } from 'react-router';
 
 class UserEntry extends Component {
 	render() {
-		var name = this.props.name.length > 20
-			? this.props.name.substring(0,20) + '...' 
+		const name = this.props.name.length > 20
+			? this.props.name.substring(0, 20) + '...'
 			: this.props.name;
-		var path = `/room/${this.props.id}`;
+		const path = `/room/${this.props.id}`;
 		return (
 			<div>
-				<Link to={path}>{name}</Link>
+				<Link to={path}>
+				{name}
+				</Link>
 			</div>
 			);
 	}

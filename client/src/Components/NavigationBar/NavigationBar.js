@@ -1,14 +1,16 @@
 import React, { Component } from 'react';
 import { Navbar, Nav, NavItem } from 'react-bootstrap';
 import { LinkContainer, IndexLinkContainer } from 'react-router-bootstrap';
-import logo from '../../assets/logo.svg';
+import logo from '../../Assets/logo.svg';
 
 class NavigationBar extends Component {
 	render() {
 		return (
 			<Navbar inverse>
 				<Navbar.Header className='App-header'>
-					<img src={ logo } className='App-logo' alt='logo' />
+					<img src={logo}
+						className='App-logo'
+						alt='logo' />
 					<Navbar.Brand>
 						React-Chat
 					</Navbar.Brand>
