@@ -111,6 +111,9 @@ class Chat extends Component {
 			.then(this.loadUsers)
 			.then(this.loadRooms);
 	}
+	loadComments() {
+		return this.props.actions.loadComments(this.props.params.id);
+	}
 	loadRooms() {
 		var req = $.ajax({
 			url: this.state.roomsApiUrl,
@@ -147,29 +150,6 @@ class Chat extends Component {
 			}.bind(this),
 			error: function(xhr, status, err) {
 				console.error(this.state.usersApiUrl, status, err.toString());
-			}.bind(this)
-		});
-		this.requests.push(req);
-		return req;
-	}
-	loadComments() {
-		var req = $.ajax({
-			url: this.state.commentsApiUrl,
-			dataType: 'json',
-			data: {
-				roomId: this.props.params.id
-			},
-			xhrFields: {
-				withCredentials: true
-			},
-			success: function(comments) {
-				console.log('Comments loaded.');
-				this.setState({
-					comments: comments
-				});
-			}.bind(this),
-			error: function(xhr, status, err) {
-				console.error(this.state.commentsApiUrl, status, err.toString());
 			}.bind(this)
 		});
 		this.requests.push(req);
@@ -245,7 +225,7 @@ class Chat extends Component {
 			<div>
 				<UserBox users={this.state.users} />
 				<CommentBox onCommentSubmit={this.handleCommentSubmit}
-					comments={this.state.comments} />
+					comments={this.props.comments} />
 				<RoomBox onRoomSubmit={this.handleRoomSubmit}
 					rooms={this.state.rooms} />
 			</div>
@@ -259,7 +239,7 @@ Chat.propTypes = {
 	}),
 	socket: PropTypes.object,
 	comments: CommentBox.propTypes.comments,
-	actions: PropTypes.object
+	actions: PropTypes.object.isRequired
 };
 
 function mapStateToProps(state, ownProps) {
