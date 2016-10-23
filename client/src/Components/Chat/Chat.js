@@ -2,7 +2,9 @@ import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import * as CommentActions from '../../Actions/CommentActions';
-import $ from 'jquery';
+import * as UserActions from '../../Actions/UserActions';
+import * as RoomActions from '../../Actions/RoomActions';
+import moment from 'moment';
 import toastr from 'toastr';
 import CommentBox from './CommentBox';
 import UserBox from './UserBox';
@@ -11,14 +13,7 @@ import RoomBox from './RoomBox';
 class Chat extends Component {
 	constructor(props) {
 		super(props);
-		this.state = {
-			commentsApiUrl: 'http://localhost:1337/comment',
-			usersApiUrl: 'http://localhost:1337/user',
-			roomsApiUrl: 'http://localhost:1337/room',
-			users: [],
-			rooms: []
-		};
-
+		
 		// comments methods
 		this.loadComments = this.loadComments.bind(this);
 		this.postComment = this.postComment.bind(this);
@@ -112,53 +107,22 @@ class Chat extends Component {
 			.then(this.loadRooms);
 	}
 	loadComments() {
-		return this.props.actions.loadComments(this.props.params.id);
+		return this.props.commentActions.loadComments(this.props.params.id);
 	}
 	loadRooms() {
-		var req = $.ajax({
-			url: this.state.roomsApiUrl,
-			dataType: 'json',
-			xhrFields: {
-				withCredentials: true
-			},
-			success: function(rooms) {
-				this.setState({
-					rooms: rooms
-				});
-			}.bind(this),
-			error: function(xhr, status, err) {
-				console.error(this.state.roomsApiUrl, status, err.toString());
-			}.bind(this)
-		});
-		this.requests.push(req);
-		return req;
+		return this.props.roomActions.loadRooms();
 	}
 	loadUsers() {
-		var req = $.ajax({
-			url: this.state.usersApiUrl,
-			dataType: 'json',
-			data: {
-				roomId: this.props.params.id
-			},
-			xhrFields: {
-				withCredentials: true
-			},
-			success: function(users) {
-				this.setState({
-					users: users
-				});
-			}.bind(this),
-			error: function(xhr, status, err) {
-				console.error(this.state.usersApiUrl, status, err.toString());
-			}.bind(this)
-		});
-		this.requests.push(req);
-		return req;
+		return this.props.userActions.loadUsers(this.props.params.id);
 	}
 	postComment(comment) {
 		// add roomId to comment
 		comment.roomId = this.props.params.id;
-		return this.props.actions.postComment(comment)
+		// give the comment a temp ID and createdAt
+		comment.id = Date.now().toString();
+		comment.createdAt = moment().format();
+
+		return this.props.commentActions.postComment(comment)
 			.catch(err => {
 				if(err) {
 					console.log(err);
@@ -167,29 +131,15 @@ class Chat extends Component {
 			});
 	}
 	postRoom(room) {
-		var oldRooms = this.state.rooms;
-		var req = $.ajax({
-			url: this.state.roomsApiUrl,
-			xhrFields: {
-				withCredentials: true
-			},
-			type: 'POST',
-			dataType: 'json',
-			data: room,
-			success: function(room) {
-				this.setState({
-					rooms: oldRooms.concat([room])
-				});
-			}.bind(this),
-			error: function(xhr, status, err) {
-				this.setState({
-					rooms: oldRooms
-				});
-				console.error(this.state.roomsApiUrl, status, err.toString());
-			}.bind(this)
-		});
-		this.requests.push(req);
-		return req;
+		// give the room a temp ID
+		room.id = Date.now().toString();
+		return this.props.roomActions.postRoom(room)
+			.catch(err => {
+				if(err) {
+					console.log(err);
+					toastr.error('Failed creating room', undefined, {timeout: 2000});
+				}
+			})
 	}
 	handleRoomSubmit(room) {
 		this.postRoom(room);
@@ -200,11 +150,11 @@ class Chat extends Component {
 	render() {
 		return (
 			<div>
-				<UserBox users={this.state.users} />
+				<UserBox users={this.props.users} />
 				<CommentBox onCommentSubmit={this.handleCommentSubmit}
 					comments={this.props.comments} />
 				<RoomBox onRoomSubmit={this.handleRoomSubmit}
-					rooms={this.state.rooms} />
+					rooms={this.props.rooms} />
 			</div>
 			);
 	}
@@ -216,18 +166,26 @@ Chat.propTypes = {
 	}),
 	socket: PropTypes.object,
 	comments: CommentBox.propTypes.comments,
-	actions: PropTypes.object.isRequired
+	users: UserBox.propTypes.users,
+	rooms: RoomBox.propTypes.rooms,
+	commentActions: PropTypes.object.isRequired,
+	userActions: PropTypes.object.isRequired,
+	roomActions: PropTypes.object.isRequired
 };
 
 function mapStateToProps(state, ownProps) {
 	return {
-		comments: state.comments
+		comments: state.comments,
+		users: state.users,
+		rooms: state.rooms
 	};
 }
 
 function mapDispatchToProps(dispatch) {
 	return {
-		actions: bindActionCreators(CommentActions, dispatch)
+		commentActions: bindActionCreators(CommentActions, dispatch),
+		userActions: bindActionCreators(UserActions, dispatch),
+		roomActions: bindActionCreators(RoomActions, dispatch)
 	};
 }
 

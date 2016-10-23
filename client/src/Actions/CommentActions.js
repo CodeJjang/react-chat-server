@@ -1,7 +1,6 @@
 import * as ActionTypes from '../Constants/ActionTypes';
 import * as CommentsApi from '../Api/CommentsApi';
 import { BEGIN, COMMIT, REVERT } from 'redux-optimist';
-import moment from 'moment';
 
 function createComment(comment, transactionId) {
 	return {
@@ -13,7 +12,6 @@ function createComment(comment, transactionId) {
 		comment
 	};
 }
-;
 
 function createCommentSuccess(comment, transactionId) {
 	return {
@@ -25,7 +23,6 @@ function createCommentSuccess(comment, transactionId) {
 		comment
 	};
 }
-;
 
 function createCommentFailed(comment, transactionId) {
 	return {
@@ -37,15 +34,11 @@ function createCommentFailed(comment, transactionId) {
 		comment
 	};
 }
-;
 
 export function postComment(comment) {
 	return dispatch => {
 		// create a transaction ID
 		let transactionId = Date.now();
-		// give the comment a temporary ID and createdAt
-		comment.id = transactionId.toString();
-		comment.createdAt = moment().format();
 		dispatch(createComment(comment, transactionId));
 
 		return CommentsApi.postComment(comment)
@@ -59,8 +52,7 @@ export function postComment(comment) {
 				throw (err);
 			});
 	};
-}
-;
+};
 
 function loadCommentsSuccess(comments) {
 	return {
@@ -68,7 +60,6 @@ function loadCommentsSuccess(comments) {
 		comments
 	};
 }
-;
 
 export function loadComments(roomId) {
 	return dispatch => {
@@ -82,5 +73,4 @@ export function loadComments(roomId) {
 				throw (err);
 			});
 	};
-}
-;
+};
