@@ -12,3 +12,15 @@ export function loadComments(roomId) {
 		}
 	});
 };
+
+export function postComment(comment) {
+	return $.ajax({
+			url: process.env.REACT_APP_COMMENTS_API_URL,
+			xhrFields: {
+				withCredentials: true
+			},
+			type: 'POST',
+			dataType: 'json',
+			data: comment
+		});
+};

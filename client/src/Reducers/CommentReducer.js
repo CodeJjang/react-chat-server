@@ -3,7 +3,7 @@ import InitialState from './InitialState';
 
 export default function(state = InitialState.comments, action) {
 	switch(action.type) {
-		case ActionTypes.CREATE_COMMENT:
+		case ActionTypes.CREATE_COMMENT_SUCCESS:
 			return [...state,
 				Object.assign({}, action.comment)];
 		case ActionTypes.LOAD_COMMENTS_SUCCESS:

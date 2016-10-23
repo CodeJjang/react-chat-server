@@ -14,7 +14,6 @@ class Chat extends Component {
 			commentsApiUrl: 'http://localhost:1337/comment',
 			usersApiUrl: 'http://localhost:1337/user',
 			roomsApiUrl: 'http://localhost:1337/room',
-			comments: [],
 			users: [],
 			rooms: []
 		};
@@ -160,34 +159,14 @@ class Chat extends Component {
 		comment.roomId = this.props.params.id;
 
 		// optimistic posting
-		const oldComments = this.state.comments;
-		comment.id = Date.now();
-		const newComments = oldComments.concat([comment]);
-		this.setState({
-			comments: newComments
-		});
-		var req = $.ajax({
-			url: this.state.commentsApiUrl,
-			xhrFields: {
-				withCredentials: true
-			},
-			type: 'POST',
-			dataType: 'json',
-			data: comment,
-			success: function(comment) {
-				this.setState({
-					comments: oldComments.concat([comment])
-				});
-			}.bind(this),
-			error: function(xhr, status, err) {
-				this.setState({
-					comments: oldComments
-				});
-				console.error(this.state.commentsApiUrl, status, err.toString());
-			}.bind(this)
-		});
-		this.requests.push(req);
-		return req;
+		// const oldComments = this.state.comments;
+		// comment.id = Date.now();
+		// const newComments = oldComments.concat([comment]);
+		// this.setState({
+		// 	comments: newComments
+		// });
+		
+		return this.props.actions.postComment(comment);
 	}
 	postRoom(room) {
 		var oldRooms = this.state.rooms;
