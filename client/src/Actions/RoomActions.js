@@ -61,9 +61,9 @@ function loadRoomsSuccess(rooms) {
 	};
 }
 
-export function loadRooms(roomId) {
+export function loadRooms() {
 	return dispatch => {
-		return RoomsApi.loadRooms(roomId)
+		return RoomsApi.loadRooms()
 			.then(rooms => {
 				console.log('Rooms loaded.');
 				dispatch(loadRoomsSuccess(rooms))

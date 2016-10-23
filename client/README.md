@@ -7,4 +7,6 @@ Configure the app using the following environment variables (you can use a .env 
 REACT_APP_COMMENTS_API_URL
 REACT_APP_USERS_API_URL
 REACT_APP_ROOMS_API_URL
+REACT_APP_ROOM_API_JOIN_URL
+REACT_APP_ROOM_API_JOIN_GLOBAL_URL
 ```  

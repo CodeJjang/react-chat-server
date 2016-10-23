@@ -39,9 +39,6 @@ class Chat extends Component {
 		this.registerToSyncMessages = this.registerToSyncMessages.bind(this);
 		this.unregisterToSyncMessages = this.unregisterToSyncMessages.bind(this);
 		this.loadData = this.loadData.bind(this);
-
-		this.requests = [];
-
 	}
 	joinRoom() {
 		(this.props.params.id
@@ -56,12 +53,16 @@ class Chat extends Component {
 				}
 			});
 	}
+	componentWillReceiveProps(nextProps) {
+		if(this.props.params.id !== nextProps.params.id) {
+			this.joinRoom();
+		}
+	}
 	componentDidMount() {
 		this.joinRoom();
 	}
 	componentWillUnmount() {
 		this.unregisterToSyncMessages();
-		this.requests.forEach((req) => req.abort());
 	}
 	onAuthenticated() {
 		return this.registerToSyncMessages()

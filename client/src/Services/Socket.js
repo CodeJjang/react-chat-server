@@ -1,7 +1,7 @@
 import SailsIOClient from 'sails.io.js';
 import SocketIOClient from 'socket.io-client';
 
-var _newCommentSyncEventName = 'sync_comments',
+const _newCommentSyncEventName = 'sync_comments',
     _newUserSyncEventName = 'sync_users',
     _newRoomSyncEventName = 'sync_rooms';
 
@@ -14,18 +14,23 @@ class Socket {
         this._usersSyncCallback = null;
         this._roomsSyncCallback = null;
 
+        this._stopListenToSync = this._stopListenToSync.bind(this);
         this._listenToSync = this._listenToSync.bind(this);
         this._listenToCommentsSync = this._listenToCommentsSync.bind(this);
         this._listenToUsersSync = this._listenToUsersSync.bind(this);
         this._listenToRoomsSync = this._listenToRoomsSync.bind(this);
         this.joinGlobalRoom = this.joinGlobalRoom.bind(this);
         this.joinRoom = this.joinRoom.bind(this);
+
+        // an array of arrays in the form of [eventName, socketCallback]
+        this._socketCallbacks = [];
     }
+
     joinGlobalRoom() {
-        var self = this;
+        const self = this;
         return new Promise(function(resolve, reject) {
             console.log('Attempting to join global room...');
-            self.io.socket.post('/room/joinGlobalRoom', function(body, JWR) {
+            self.io.socket.post(process.env.REACT_APP_ROOM_API_JOIN_GLOBAL_URL, function(body, JWR) {
                 if (JWR.statusCode !== 200) {
                     console.log('Failed joining global room.');
                     console.log('Sails responded with: ', body);
@@ -40,12 +45,13 @@ class Socket {
             });
         });
     }
+
     joinRoom(roomId) {
-        var self = this;
+        const self = this;
         return new Promise(function(resolve, reject) {
             console.log('Attempting to join room of id %s...', roomId);
             self.io.socket.post(
-                '/room/join',
+                process.env.REACT_APP_ROOM_API_JOIN_URL,
                 { roomId: roomId },
                 function(body, JWR) {
                     if (JWR.statusCode !== 200) {
@@ -62,49 +68,59 @@ class Socket {
                 });
         });
     }
+    _stopListenToSync() {
+        this._socketCallbacks.forEach(params => {
+            this.io.socket.off(...params);
+        });
+    }
+
     _listenToSync() {
+        this._stopListenToSync();
         this._listenToCommentsSync();
         this._listenToUsersSync();
         this._listenToRoomsSync();
     }
 
     _listenToCommentsSync() {
-        var self = this;
-        this.io.socket.on(_newCommentSyncEventName, function(data) {
+        const callback = data => {
             console.log('Received comments sync message.');
-            if(self._commentsSyncCallback) {
-                self._commentsSyncCallback();
+            if(this._commentsSyncCallback) {
+                this._commentsSyncCallback();
             }
             else {
                 console.log('No callback is hooked.');
             }
-        });
+        };
+        this._socketCallbacks.push([_newCommentSyncEventName, callback]);
+        this.io.socket.on(_newCommentSyncEventName, callback);
     }
 
     _listenToUsersSync() {
-        var self = this;
-        this.io.socket.on(_newUserSyncEventName, function(data) {
+        const callback = data => {
             console.log('Received users sync message.');
-            if(self._usersSyncCallback) {
-                self._usersSyncCallback();
+            if(this._usersSyncCallback) {
+                this._usersSyncCallback();
             }
             else {
                 console.log('No callback is hooked.');
             }
-        });
+        }; 
+        this._socketCallbacks.push([_newUserSyncEventName, callback]);
+        this.io.socket.on(_newUserSyncEventName, callback);
     }
 
     _listenToRoomsSync() {
-        var self = this;
-        this.io.socket.on(_newRoomSyncEventName, function(data) {
+        const callback = data => {
             console.log('Received rooms sync message.');
-            if(self._roomsSyncCallback) {
-                self._roomsSyncCallback();
+            if(this._roomsSyncCallback) {
+                this._roomsSyncCallback();
             }
             else {
                 console.log('No callback is hooked.');
             }
-        });
+        };
+        this._socketCallbacks.push([_newRoomSyncEventName, callback]);
+        this.io.socket.on(_newRoomSyncEventName, callback);
     }
 
     set commentsSyncCallback(cb) {

@@ -32,6 +32,7 @@ module.exports = {
             .then(() => {
                 // case user nickname updated
                 if (author.localeCompare(oldNickname) !== 0) {
+                    console.log('Detected username has changed...');
                     syncUserUpdated(req);
                 }
                 return Promise.resolve();
