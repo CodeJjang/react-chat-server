@@ -6,6 +6,7 @@ import ConfigureStore from './Store/ConfigureStore';
 import Routes from './Routes';
 import 'bootstrap/dist/css/bootstrap.css';
 import 'bootstrap/dist/css/bootstrap-theme.css';
+import 'toastr/build/toastr.min.css';
 import './index.css';
 
 const store = ConfigureStore();

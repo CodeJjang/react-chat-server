@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import * as CommentActions from '../../Actions/CommentActions';
 import $ from 'jquery';
+import toastr from 'toastr';
 import CommentBox from './CommentBox';
 import UserBox from './UserBox';
 import RoomBox from './RoomBox';
@@ -157,16 +158,13 @@ class Chat extends Component {
 	postComment(comment) {
 		// add roomId to comment
 		comment.roomId = this.props.params.id;
-
-		// optimistic posting
-		// const oldComments = this.state.comments;
-		// comment.id = Date.now();
-		// const newComments = oldComments.concat([comment]);
-		// this.setState({
-		// 	comments: newComments
-		// });
-		
-		return this.props.actions.postComment(comment);
+		return this.props.actions.postComment(comment)
+			.catch(err => {
+				if(err) {
+					console.log(err);
+					toastr.error('Failed posting comment', undefined, {timeout: 2000});
+				}
+			});
 	}
 	postRoom(room) {
 		var oldRooms = this.state.rooms;
