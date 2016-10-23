@@ -1,6 +1,7 @@
 import * as ActionTypes from '../Constants/ActionTypes';
 import * as CommentsApi from '../Api/CommentsApi';
 import { BEGIN, COMMIT, REVERT } from 'redux-optimist';
+import moment from 'moment';
 
 function createComment(comment, transactionId) {
 	return {
@@ -44,7 +45,7 @@ export function postComment(comment) {
 		let transactionId = Date.now();
 		// give the comment a temporary ID and createdAt
 		comment.id = transactionId.toString();
-		comment.createdAt = transactionId.toString();
+		comment.createdAt = moment().format();
 		dispatch(createComment(comment, transactionId));
 
 		return CommentsApi.postComment(comment)
