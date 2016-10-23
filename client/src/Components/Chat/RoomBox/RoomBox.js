@@ -13,6 +13,7 @@ class RoomBox extends Component {
 		};
 		this.toggleAddRoom = this.toggleAddRoom.bind(this);
 		this.onHide = this.onHide.bind(this);
+		this.handleRoomSubmit = this.handleRoomSubmit.bind(this);
 	}
 	toggleAddRoom() {
 		this.setState({
@@ -24,6 +25,12 @@ class RoomBox extends Component {
 			showAddRoom: false
 		});
 	}
+	handleRoomSubmit(room) {
+		this.setState({
+			showAddRoom: false
+		});
+		this.props.onRoomSubmit(room);
+	}
 	render() {
 		return (
 			<div className='RoomsBox'>
@@ -31,7 +38,7 @@ class RoomBox extends Component {
 					onHide={this.onHide}
 					container={this}
 					target={() => ReactDOM.findDOMNode(this._addButton)}
-					onRoomSubmit={this.props.onRoomSubmit} />
+					onRoomSubmit={this.handleRoomSubmit} />
 				<AddButton ref={(c) => this._addButton = c}
 					onClickHandler={this.toggleAddRoom} />
 				<h4>Rooms</h4>
