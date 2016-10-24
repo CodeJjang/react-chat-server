@@ -11,6 +11,7 @@
  * For more information on configuring the session, check out:
  * http://sailsjs.org/#!/documentation/reference/sails.config/sails.config.session.html
  */
+var util = require('util');
 
 module.exports.session = {
 
@@ -75,7 +76,9 @@ module.exports.session = {
   ***************************************************************************/
 
   adapter: 'mongo',
-  // url: 'mongodb://ds033116.mlab.com:33116/react_dev', // defined in local.js
+  // local configurations are defined in local.js
+  url: util.format('mongodb://%s:%s@%s:%s/%s',
+    process.env.MONGO_USERNAME, process.env.MONGO_PASSWORD, process.env.MONGO_HOST, process.env.MONGO_PORT, process.env.MONGO_DATABASE),
 
   /***************************************************************************
   *                                                                          *

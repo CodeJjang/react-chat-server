@@ -11,12 +11,15 @@ MONGO_PASSWORD
 FRONTEND_URL
 ```
 
-At last, place a `local.js` file containing the app's sensitive information under `config/` in the following format:  
+For development, place a `local.js` file containing the app's local & sensitive information under `config/` in the following format:  
 ```
 module.exports = {
     connections: {
         mongoDb: {
-            user // username to mongo
+        	host: // mongo host
+        	port: // mongo port
+        	database: // mongo database name
+            user: // username to mongo
             password: // password to mongo
         }
     },

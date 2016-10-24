@@ -56,12 +56,14 @@ module.exports.connections = {
   * Run: npm install sails-mongo                                             *
   *                                                                          *
   ***************************************************************************/
-  // user and password are defined in local.js  
+  // local configurations are defined in local.js  
   mongoDb: {
     adapter: 'sails-mongo',
-    host: process.env.MONGO_HOST || 'ds033116.mlab.com',
-    port: process.env.MONGO_PORT || 33116,
-    database: process.env.MONGO_DATABASE || 'react_dev' //optional
+    host: process.env.MONGO_HOST,
+    port: process.env.MONGO_PORT,
+    database: process.env.MONGO_DATABASE,
+    user: process.env.MONGO_USERNAME,
+    password: process.env.MONGO_PASSWORD
   },
 
   /***************************************************************************
