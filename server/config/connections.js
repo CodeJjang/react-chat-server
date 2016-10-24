@@ -59,9 +59,9 @@ module.exports.connections = {
   // user and password are defined in local.js  
   mongoDb: {
     adapter: 'sails-mongo',
-    host: 'ds033116.mlab.com',
-    port: 33116,
-    database: 'react_dev' //optional
+    host: process.env.MONGO_HOST || 'ds033116.mlab.com',
+    port: process.env.MONGO_PORT || 33116,
+    database: process.env.MONGO_DATABASE || 'react_dev' //optional
   },
 
   /***************************************************************************
