@@ -25,7 +25,7 @@
  *  http://sailsjs.org/#!/documentation/reference/sails.config/sails.config.cors.html
  *
  */
-
+console.log('origin:', process.env.FRONTEND_URL);
 module.exports.cors = {
 
   /***************************************************************************
