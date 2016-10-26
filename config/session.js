@@ -92,7 +92,7 @@ module.exports.session = {
   *                                                                          *
   ***************************************************************************/
 
-  auto_reconnect: true
+  auto_reconnect: true,
   // collection: 'sessions',
   // stringify: true,
   mongoOptions: {

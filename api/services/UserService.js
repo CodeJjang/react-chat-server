@@ -13,6 +13,7 @@ module.exports.createUser = function(currentRoomId) {
 };
 
 module.exports.findUser = function(params) {
+	console.log('Finding user by params:', JSON.stringify(params));
 	return User.find(params);
 };
 
