@@ -32,9 +32,9 @@ module.exports.session = {
   *                                                                          *
   ***************************************************************************/
   
-  // cookie: {
-  //   maxAge: 24 * 60 * 60 * 1000
-  // },
+  cookie: {
+    maxAge: 24 * 60 * 60 * 1000
+  },
 
   /***************************************************************************
   *                                                                          *
@@ -92,12 +92,19 @@ module.exports.session = {
   *                                                                          *
   ***************************************************************************/
 
+  auto_reconnect: true
   // collection: 'sessions',
   // stringify: true,
-  // mongoOptions: {
-  //   server: {
-  //     ssl: true
-  //   }
-  // }
+  mongoOptions: {
+    server: {
+      // ssl: true
+      socketOptions: {
+        keepAlive: 24 * 60 * 60 * 1000 // 24hr
+      }
+    },
+    replSet: {
+      keepAlive: 24 * 60 * 60 * 1000 // 24hr
+    }
+  }
 
 };
