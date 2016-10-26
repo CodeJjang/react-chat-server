@@ -25,7 +25,7 @@
  *  http://sailsjs.org/#!/documentation/reference/sails.config/sails.config.cors.html
  *
  */
-console.log('origin:', process.env.FRONTEND_URL);
+
 module.exports.cors = {
 
   /***************************************************************************
@@ -47,7 +47,7 @@ module.exports.cors = {
   *                                                                          *
   ***************************************************************************/
 
-  origin: process.env.FRONTEND_URL || 'https://aviad-react-chat.herokuapp.com',
+  origin: process.env.FRONTEND_URL || 'http://localhost:3000',
 
   /***************************************************************************
   *                                                                          *
